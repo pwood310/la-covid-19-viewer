@@ -102,39 +102,19 @@ const options = {
   series: [{
     name: 'Confirmed Cases',
     data: confirmedSeriesData
-    // data: [     //{x: new Date('20200301'), y:2},
-    // {x: (new Date('2018-12-31')).valueOf(), y:31},
-    // {x: (new Date('2019-01-01')).valueOf(), y:1},
-    // {x: (new Date('2019-02-01')).valueOf(), y:41}
-    // ]
   },
   {
     name: 'Confirmed Cases Daily Increase',
     data: confirmedDailyIncreaseData
-    // data: [     //{x: new Date('20200301'), y:2},
-    // {x: (new Date('2018-12-31')).valueOf(), y:31},
-    // {x: (new Date('2019-01-01')).valueOf(), y:1},
-    // {x: (new Date('2019-02-01')).valueOf(), y:41}
-    // ]
   },
   {
     name: 'Days Needed to Double Confirmed Cases',
     data: doublingRateDaysData
-    // data: [     //{x: new Date('20200301'), y:2},
-    // {x: (new Date('2018-12-31')).valueOf(), y:31},
-    // {x: (new Date('2019-01-01')).valueOf(), y:1},
-    // {x: (new Date('2019-02-01')).valueOf(), y:41}
-    // ]
   },
   {
     name: 'Deaths',
     data: deathSeriesData,
     id: 'deaths'
-    // data: [     //{x: new Date('20200301'), y:2},
-    // {x: (new Date('2018-12-31')).valueOf(), y:1},
-    // {x: (new Date('2019-01-01')).valueOf(), y:3},
-    // {x: (new Date('2019-02-01')).valueOf(), y:5}
-    // ]
   },
   ]
 
