@@ -88,7 +88,7 @@ export class CovidChart extends Component {
                     type: 'spline'
                 },
                 title: {
-                    text: 'LA County COVID-19 2020 - ' + capitalizeFirstLetter(this.props.covidType)
+                    text: capitalizeFirstLetter(this.props.covidType)
                 },
                 xAxis: {
                     type: 'datetime'

@@ -3,7 +3,6 @@ import React from 'react';
 // import { render } from 'react-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { LineChart } from './LineChart';
 import { CovidChart } from './CovidChart';
 //import moment from 'moment';
 import _ from 'lodash';
@@ -103,38 +102,38 @@ const options = {
   series: [{
     name: 'Confirmed Cases',
     data: confirmedSeriesData
-    // data: [     //{x: new Date('20200301'), y:2}, 
-    // {x: (new Date('2018-12-31')).valueOf(), y:31}, 
-    // {x: (new Date('2019-01-01')).valueOf(), y:1}, 
-    // {x: (new Date('2019-02-01')).valueOf(), y:41} 
+    // data: [     //{x: new Date('20200301'), y:2},
+    // {x: (new Date('2018-12-31')).valueOf(), y:31},
+    // {x: (new Date('2019-01-01')).valueOf(), y:1},
+    // {x: (new Date('2019-02-01')).valueOf(), y:41}
     // ]
   },
   {
     name: 'Confirmed Cases Daily Increase',
     data: confirmedDailyIncreaseData
-    // data: [     //{x: new Date('20200301'), y:2}, 
-    // {x: (new Date('2018-12-31')).valueOf(), y:31}, 
-    // {x: (new Date('2019-01-01')).valueOf(), y:1}, 
-    // {x: (new Date('2019-02-01')).valueOf(), y:41} 
+    // data: [     //{x: new Date('20200301'), y:2},
+    // {x: (new Date('2018-12-31')).valueOf(), y:31},
+    // {x: (new Date('2019-01-01')).valueOf(), y:1},
+    // {x: (new Date('2019-02-01')).valueOf(), y:41}
     // ]
   },
   {
     name: 'Days Needed to Double Confirmed Cases',
     data: doublingRateDaysData
-    // data: [     //{x: new Date('20200301'), y:2}, 
-    // {x: (new Date('2018-12-31')).valueOf(), y:31}, 
-    // {x: (new Date('2019-01-01')).valueOf(), y:1}, 
-    // {x: (new Date('2019-02-01')).valueOf(), y:41} 
+    // data: [     //{x: new Date('20200301'), y:2},
+    // {x: (new Date('2018-12-31')).valueOf(), y:31},
+    // {x: (new Date('2019-01-01')).valueOf(), y:1},
+    // {x: (new Date('2019-02-01')).valueOf(), y:41}
     // ]
   },
   {
     name: 'Deaths',
     data: deathSeriesData,
     id: 'deaths'
-    // data: [     //{x: new Date('20200301'), y:2}, 
-    // {x: (new Date('2018-12-31')).valueOf(), y:1}, 
-    // {x: (new Date('2019-01-01')).valueOf(), y:3}, 
-    // {x: (new Date('2019-02-01')).valueOf(), y:5} 
+    // data: [     //{x: new Date('20200301'), y:2},
+    // {x: (new Date('2018-12-31')).valueOf(), y:1},
+    // {x: (new Date('2019-01-01')).valueOf(), y:3},
+    // {x: (new Date('2019-02-01')).valueOf(), y:5}
     // ]
   },
   ]
@@ -145,19 +144,19 @@ options.series.shift();
 options.series.shift();
 
 const App = () => <div>
-  <HighchartsReact
-    highcharts={Highcharts}
-    options={options}
-  />
-  
-  <div>
+  <div className="container4">
+    <p>
+      <h1>LA County COVID-19</h1>
+    </p>
+  </div>
+
+  <div >
     <CovidChart
-    covidType='confirmedCases'
-    initScaleAsLog='true'
+      covidType='confirmedCases'
+      initScaleAsLog='true'
     />
     {/* <button id="toggle-type" class="autocompare">Type</button> */}
   </div>
-
 
   <div>
     <CovidChart
