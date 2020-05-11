@@ -1,0 +1,390 @@
+[
+    {
+      "date": "2020-03-14",
+      "confirmedCases": 53,
+      "deaths": 0,
+      "filename": "LAHealth March 14",
+      "matched": "second"
+    },
+    {
+      "date": "2020-03-15",
+      "confirmedCases": 69,
+      "deaths": 0,
+      "filename": "LAHealth March 15",
+      "matched": "second"
+    },
+    {
+      "date": "2020-03-16",
+      "confirmedCases": 94,
+      "deaths": 0,
+      "filename": "LAHealth March 16",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-17",
+      "confirmedCases": 144,
+      "deaths": 0,
+      "filename": "LAHealth March 17",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-18",
+      "confirmedCases": 190,
+      "deaths": 0,
+      "filename": "LAHealth March 18",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-19",
+      "confirmedCases": 231,
+      "deaths": 0,
+      "filename": "LAHealth March 19",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-20",
+      "confirmedCases": 292,
+      "deaths": 0,
+      "filename": "LAHealth March 20",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-21",
+      "confirmedCases": 351,
+      "deaths": 4,
+      "filename": "LAHealth March 21",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-22",
+      "confirmedCases": 409,
+      "deaths": 5,
+      "filename": "LAHealth March 22",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-23",
+      "confirmedCases": 536,
+      "deaths": 7,
+      "filename": "LAHealth March 23",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-24",
+      "confirmedCases": 662,
+      "deaths": 11,
+      "filename": "LAHealth March 24",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-25",
+      "confirmedCases": 799,
+      "deaths": 13,
+      "filename": "LAHealth March 25",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-26",
+      "confirmedCases": 1216,
+      "deaths": 21,
+      "filename": "LAHealth March 26",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-27",
+      "confirmedCases": 1465,
+      "deaths": 26,
+      "filename": "LAHealth March 27",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-28",
+      "confirmedCases": 1804,
+      "deaths": 32,
+      "filename": "LAHealth March 28",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-29",
+      "confirmedCases": 2136,
+      "deaths": 37,
+      "filename": "LAHealth March 29",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-30",
+      "confirmedCases": 2474,
+      "deaths": 44,
+      "filename": "LAHealth March 30",
+      "matched": "first"
+    },
+    {
+      "date": "2020-03-31",
+      "confirmedCases": 3011,
+      "deaths": 54,
+      "filename": "LAHealth March 31",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-01",
+      "confirmedCases": 3518,
+      "deaths": 65,
+      "filename": "LAHealth April 01",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-02",
+      "confirmedCases": 4045,
+      "deaths": 78,
+      "filename": "LAHealth April 02",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-03",
+      "confirmedCases": 4566,
+      "deaths": 89,
+      "filename": "LAHealth April 03",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-04",
+      "confirmedCases": 5277,
+      "deaths": 117,
+      "filename": "LAHealth April 04",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-05",
+      "confirmedCases": 5940,
+      "deaths": 132,
+      "filename": "LAHealth April 05",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-06",
+      "confirmedCases": 6360,
+      "deaths": 147,
+      "filename": "LAHealth April 06",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-07",
+      "confirmedCases": 6910,
+      "deaths": 169,
+      "filename": "LAHealth April 07",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-08",
+      "confirmedCases": 7530,
+      "deaths": 198,
+      "filename": "LAHealth April 08",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-09",
+      "confirmedCases": 7955,
+      "deaths": 223,
+      "filename": "LAHealth April 09",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-10",
+      "confirmedCases": 8430,
+      "deaths": 241,
+      "filename": "LAHealth April 10",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-11",
+      "confirmedCases": 8873,
+      "deaths": 265,
+      "filename": "LAHealth April 11",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-12",
+      "confirmedCases": 9192,
+      "deaths": 296,
+      "filename": "LAHealth April 12",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-13",
+      "confirmedCases": 9420,
+      "deaths": 320,
+      "filename": "LAHealth April 13",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-14",
+      "confirmedCases": 10047,
+      "deaths": 360,
+      "filename": "LAHealth April 14",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-15",
+      "confirmedCases": 10496,
+      "deaths": 402,
+      "filename": "LAHealth April 15",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-16",
+      "confirmedCases": 10854,
+      "deaths": 455,
+      "filename": "LAHealth April 16",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-17",
+      "confirmedCases": 11397,
+      "deaths": 495,
+      "filename": "LAHealth April 17",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-18",
+      "confirmedCases": 12021,
+      "deaths": 576,
+      "filename": "LAHealth April 18",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-19",
+      "confirmedCases": 12341,
+      "deaths": 600,
+      "filename": "LAHealth April 19",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-20",
+      "confirmedCases": 13816,
+      "deaths": 617,
+      "filename": "LAHealth April 20",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-21",
+      "confirmedCases": 15140,
+      "deaths": 663,
+      "filename": "LAHealth April 21",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-22",
+      "confirmedCases": 16435,
+      "deaths": 729,
+      "filename": "LAHealth April 22",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-23",
+      "confirmedCases": 17508,
+      "deaths": 797,
+      "filename": "LAHealth April 23",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-24",
+      "confirmedCases": 18517,
+      "deaths": 848,
+      "filename": "LAHealth April 24",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-25",
+      "confirmedCases": 19107,
+      "deaths": 895,
+      "filename": "LAHealth April 25",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-26",
+      "confirmedCases": 19528,
+      "deaths": 913,
+      "filename": "LAHealth April 26",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-27",
+      "confirmedCases": 20417,
+      "deaths": 942,
+      "filename": "LAHealth April 27",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-28",
+      "confirmedCases": 20976,
+      "deaths": 1000,
+      "filename": "LAHealth April 28",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-29",
+      "confirmedCases": 22485,
+      "deaths": 1056,
+      "filename": "LAHealth April 29",
+      "matched": "first"
+    },
+    {
+      "date": "2020-04-30",
+      "confirmedCases": 23182,
+      "deaths": 1111,
+      "filename": "LAHealth April 30",
+      "matched": "first"
+    },
+    {
+      "date": "2020-05-01",
+      "confirmedCases": 24215,
+      "deaths": 1172
+    },
+    {
+      "date": "2020-05-02",
+      "confirmedCases": 24894,
+      "deaths": 1209
+    },
+    {
+      "date": "2020-05-03",
+      "confirmedCases": 25662,
+      "deaths": 1229
+    },
+    {
+      "date": "2020-05-04",
+      "confirmedCases": 26217,
+      "deaths": 1256
+    },
+    {
+      "date": "2020-05-05",
+      "confirmedCases": 27815,
+      "deaths": 1313
+    },
+    {
+        "date": "2020-05-06",
+        "confirmedCases": 28644,
+        "deaths": 1367
+      },
+      {
+        "date": "2020-05-07",
+        "confirmedCases": 29427,
+        "deaths": 1418
+      },
+      {
+        "date": "2020-05-08",
+        "confirmedCases": 30296,
+        "deaths": 1468
+      },
+      {
+        "date": "2020-05-09",
+        "confirmedCases": 31197,
+        "deaths": 1512
+      },
+      {
+        "date": "2020-05-10",
+        "confirmedCases": 31677,
+        "deaths": 1530
+      }
+     
+  ]
+  
