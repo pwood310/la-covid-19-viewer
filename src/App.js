@@ -1,13 +1,8 @@
 // jshint esversion: 6
-import React from 'react';
-// import { render } from 'react-dom';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import { CovidChart } from './CovidChart';
-//import moment from 'moment';
-import _ from 'lodash';
 
-import logo from './logo.svg';
+import React from 'react';
+import { CovidChart } from './CovidChart';
+
 import './App.css';
 
 import rawData from './data/rawData.json';
@@ -25,7 +20,7 @@ function createDifferentialRunningAverages(arrayOfObj, labelName, daysInAverage)
     return sum / arr.length;
   }
 
-  let differenceArray = arrayOfObj.map((item, index, arr) => { return index == 0 ? item[labelName] : item[labelName] - arr[index - 1][labelName] });
+  let differenceArray = arrayOfObj.map((item, index, arr) => { return index === 0 ? item[labelName] : item[labelName] - arr[index - 1][labelName] });
   let averages = differenceArray.map((_item, index, arr) => { return arrAvg(arr.slice(Math.max(0, index - daysInAverage), index + 1)) });
 
   let answer = [];
@@ -77,8 +72,8 @@ for (let idx = 0; idx < rawData.length; idx++) {
 
 }
 
-console.log('DEATH1', deathSeriesDailyData)
-console.log('DEATH', deathSeriesData)
+// console.log('DEATH1', deathSeriesDailyData);
+// console.log('DEATH', deathSeriesData);
 
 const options = {
   chart: {
@@ -149,25 +144,5 @@ const App = () => <div>
 
 </div>
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;

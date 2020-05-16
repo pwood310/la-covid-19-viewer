@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
 import React, { Component } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
@@ -15,7 +15,7 @@ function capitalizeFirstLetter(s) {
 export class CovidChart extends Component {
 
     extractDifferenceArray(rawDataArray, labelName) {
-        return rawDataArray.map((item, index, arr) => { return index == 0 ? item[labelName] : item[labelName] - arr[index - 1][labelName] });
+        return rawDataArray.map((item, index, arr) => { return index === 0 ? item[labelName] : item[labelName] - arr[index - 1][labelName] });
     }
 
     createDifferentialRunningAverages(arrayOfObj, labelName, daysInAverage) {
@@ -53,9 +53,8 @@ export class CovidChart extends Component {
     }
 
     setSeriesData(chartOptions, showCumulative) {
-        let self = this;
         chartOptions.series = null;
-        console.log(chartOptions);
+        //console.log(chartOptions);
 
         let { dailyValues, cumulativeValues } = this.createDifferentialRunningAverages(rawData, this.props.covidType, 1);
         chartOptions.series = [{
@@ -82,7 +81,7 @@ export class CovidChart extends Component {
         // props: covidType: [ deaths, confirmedCases ]
         //        initScaleAsLog: [ true, false ]
 
-        console.log('props=', props)
+        // console.log('props=', props)
 
         this.state = {
             // To avoid unnecessary update keep all options in the state.
@@ -98,45 +97,45 @@ export class CovidChart extends Component {
                     type: 'datetime'
                 },
 
-                yAxis: 
-                [{ // Primary yAxis
-                    //type: this.props.initScaleAsLog ? 'logarithmic' : 'linear',
-                    type: 'linear',
-                    labels: {
-                      format: '{value}',
-                      style: {
-                        color: Highcharts.getOptions().colors[2]
-                      }
-                    },
-                    title: {
-                      text: 'Daily',
-                      style: {
-                     //   color: Highcharts.getOptions().colors[2]
-                      }
-                    },
-                    //minorTickInterval: 0.1,
-                    // accessibility: {
-                    //   rangeDescription: 'Range: 0.1 to 1000'
-                    // }
-                    opposite: false
-                  },{ // Secondary yAxis
-                    type: this.props.initScaleAsLog ? 'logarithmic' : 'linear',
-                    labels: {
-                      format: '{value}',
-                      style: {
-                     //   color: Highcharts.getOptions().colors[0]
-                      }
-                    },
-                    title: {
-                      text: 'Cumulative',
-                      style: {
-                      //  color: Highcharts.getOptions().colors[0]
-                      }
-                    },
-                    opposite: true
-                  }                 
+                yAxis:
+                    [{ // Primary yAxis
+                        //type: this.props.initScaleAsLog ? 'logarithmic' : 'linear',
+                        type: 'linear',
+                        labels: {
+                            format: '{value}',
+                            style: {
+                                color: Highcharts.getOptions().colors[2]
+                            }
+                        },
+                        title: {
+                            text: 'Daily',
+                            style: {
+                                //   color: Highcharts.getOptions().colors[2]
+                            }
+                        },
+                        //minorTickInterval: 0.1,
+                        // accessibility: {
+                        //   rangeDescription: 'Range: 0.1 to 1000'
+                        // }
+                        opposite: false
+                    }, { // Secondary yAxis
+                        type: this.props.initScaleAsLog ? 'logarithmic' : 'linear',
+                        labels: {
+                            format: '{value}',
+                            style: {
+                                //   color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        title: {
+                            text: 'Cumulative',
+                            style: {
+                                //  color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        opposite: true
+                    }
 
-                ],
+                    ],
                 plotOptions: {
                     series: {
                         point: {
@@ -162,7 +161,7 @@ export class CovidChart extends Component {
 
     toggleCumulativeScale = () => {
         //  The chart is updated only with new options.
-        let newScalingType = this.state.chartOptions.yAxis[1].type == 'logarithmic' ? 'linear' : 'logarithmic'
+        let newScalingType = this.state.chartOptions.yAxis[1].type === 'logarithmic' ? 'linear' : 'logarithmic'
         let newState = _.cloneDeep(this.state);
         newState.chartOptions.yAxis[1].type = newScalingType;
         this.setState(newState);
@@ -177,7 +176,7 @@ export class CovidChart extends Component {
     };
 
     render() {
-        console.log("render called");
+        //console.log("render called");
         const { showCumulative, chartOptions, hoverData } = this.state;
         this.setSeriesData(chartOptions, showCumulative);
 
