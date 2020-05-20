@@ -125,14 +125,14 @@ const App = () => <div>
     </p>
   </div>
 
-  <div >
+  <div className="container5">
     <CovidChart
       covidType='confirmedCases'
     />
     {/* <button id="toggle-type" class="autocompare">Type</button> */}
   </div>
 
-  <div>
+  <div className="container5b">
     <CovidChart
     covidType='deaths'
     />
