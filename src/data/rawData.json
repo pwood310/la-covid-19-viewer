@@ -376,5 +376,35 @@
         "date": "2020-05-15",
         "deaths": 1755,
         "parseType": "first"
+    },
+    {
+        "confirmedCases": 37303,
+        "date": "2020-05-16",
+        "deaths": 1793,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 37974,
+        "date": "2020-05-17",
+        "deaths": 1821,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 38451,
+        "date": "2020-05-18",
+        "deaths": 1839,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 39573,
+        "date": "2020-05-19",
+        "deaths": 1913,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 40857,
+        "date": "2020-05-20",
+        "deaths": 1970,
+        "parseType": "first"
     }
 ]
