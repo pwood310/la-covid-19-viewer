@@ -128,7 +128,6 @@ const App = () => <div>
   <div >
     <CovidChart
       covidType='confirmedCases'
-      initScaleAsLog='true'
     />
     {/* <button id="toggle-type" class="autocompare">Type</button> */}
   </div>
@@ -136,7 +135,6 @@ const App = () => <div>
   <div>
     <CovidChart
     covidType='deaths'
-    initScaleAsLog='false'
     />
     {/* <button id="toggle-type" class="autocompare">Type</button> */}
   </div>

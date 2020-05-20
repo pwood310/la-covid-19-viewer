@@ -52,7 +52,7 @@ export class CovidChart extends Component {
         return { dailyValues, cumulativeValues };
     }
 
-    setSeriesData(chartOptions, showCumulative) {
+    setSeriesData(chartOptions) {
         chartOptions.series = null;
         //console.log(chartOptions);
 
@@ -64,14 +64,12 @@ export class CovidChart extends Component {
             type: 'column',
         }];
 
-        if (showCumulative) {
-            chartOptions.series.push({
-                yAxis: 1,
-                name: 'cumulative ' + this.props.covidType,
-                data: cumulativeValues,
-                type: 'spline',
-            });
-        }
+        chartOptions.series.push({
+            yAxis: 1,
+            name: 'cumulative ' + this.props.covidType,
+            data: cumulativeValues,
+            type: 'spline',
+        });
     }
 
 
@@ -81,11 +79,10 @@ export class CovidChart extends Component {
         // props: covidType: [ deaths, confirmedCases ]
         //        initScaleAsLog: [ true, false ]
 
-        // console.log('props=', props)
+        console.log('p rops=', props)
 
         this.state = {
             // To avoid unnecessary update keep all options in the state.
-            showCumulative: true,
             chartOptions: {
                 chart: {
                     type: 'spline'
@@ -99,7 +96,6 @@ export class CovidChart extends Component {
 
                 yAxis:
                     [{ // Primary yAxis
-                        //type: this.props.initScaleAsLog ? 'logarithmic' : 'linear',
                         type: 'linear',
                         labels: {
                             format: '{value}',
@@ -119,7 +115,7 @@ export class CovidChart extends Component {
                         // }
                         opposite: false
                     }, { // Secondary yAxis
-                        type: this.props.initScaleAsLog ? 'logarithmic' : 'linear',
+                        type: 'linear',
                         labels: {
                             format: '{value}',
                             style: {
@@ -167,24 +163,16 @@ export class CovidChart extends Component {
         this.setState(newState);
     };
 
-    toggleShowCumulative = () => {
-        //  The chart is updated only with new options.
-        let newShowCumulative = !this.state.showCumulative
-        let newState = _.cloneDeep(this.state);
-        newState.showCumulative = newShowCumulative;
-        this.setState(newState);
-    };
 
     render() {
         //console.log("render called");
-        const { showCumulative, chartOptions, hoverData } = this.state;
-        this.setSeriesData(chartOptions, showCumulative);
+        const { chartOptions, hoverData } = this.state;
+        this.setSeriesData(chartOptions);
 
         return (<div>
             <HighchartsReact highcharts={Highcharts} options={chartOptions} />
             {/* <h3>Hovering over {hoverData}</h3> */}
             <button onClick={this.toggleCumulativeScale.bind(this)}>Toggle Cumulative Scale</button>
-            <button onClick={this.toggleShowCumulative.bind(this)}>Toggle Cumulative</button>
         </div>);
     }
 }
