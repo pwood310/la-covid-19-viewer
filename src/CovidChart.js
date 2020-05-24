@@ -18,7 +18,7 @@ export class CovidChart extends Component {
         return rawDataArray.map((item, index, arr) => { return index === 0 ? item[labelName] : item[labelName] - arr[index - 1][labelName] });
     }
 
-    createDifferentialRunningAverages(arrayOfObj, labelName, daysInAverage) {
+    createDifferentialRunningAverages(arrayOfObj, labelName) {
         let arrAvg = (arr) => {
             if (!arr.length)
                 return 0;
@@ -37,37 +37,49 @@ export class CovidChart extends Component {
             cumulativeArray.push(total);
         }
 
+        let daysInAverage = 7;
         let averagesArray = differenceArray.map((_item, index, arr) => { return arrAvg(arr.slice(Math.max(0, index + 1 - daysInAverage), index + 1)) });
 
+        let avgValues = [];
         let dailyValues = [];
         let cumulativeValues = [];
         for (let i = 0; i < averagesArray.length; i++) {
             let date = new Date(arrayOfObj[i].date).valueOf();
-            let dailyItem = { x: date, y: averagesArray[i] };
+
+            let dailyItem = { x: date, y: differenceArray[i] };
+            let avgItem = { x: date, y: averagesArray[i] };
             let cumulativeItem = { x: date, y: cumulativeArray[i] };
 
             dailyValues.push(dailyItem);
+            avgValues.push(avgItem); 
             cumulativeValues.push(cumulativeItem);
         }
-        return { dailyValues, cumulativeValues };
+        return { dailyValues, avgValues, cumulativeValues };
     }
 
     setSeriesData(chartOptions) {
         chartOptions.series = null;
         //console.log(chartOptions);
 
-        let { dailyValues, cumulativeValues } = this.createDifferentialRunningAverages(rawData, this.props.covidType, 1);
+        let { dailyValues, avgValues, cumulativeValues } = this.createDifferentialRunningAverages(rawData, this.props.covidType);
         chartOptions.series = [{
             yAxis: 0,
-            name: 'daily ' + this.props.covidType,
+            name: 'Daily',
             data: dailyValues,
             type: 'column',
         }];
 
         chartOptions.series.push({
             yAxis: 1,
-            name: 'cumulative ' + this.props.covidType,
+            name: 'Cumulative',
             data: cumulativeValues,
+            type: 'spline',
+        });
+
+        chartOptions.series.push({
+            yAxis: 0,
+            name: '7-Day Moving Average',
+            data: avgValues,
             type: 'spline',
         });
     }
@@ -79,7 +91,7 @@ export class CovidChart extends Component {
         // props: covidType: [ deaths, confirmedCases ]
         //        initScaleAsLog: [ true, false ]
 
-        console.log('p rops=', props)
+        console.log('props=', props)
 
         this.state = {
             // To avoid unnecessary update keep all options in the state.
@@ -93,14 +105,22 @@ export class CovidChart extends Component {
                 xAxis: {
                     type: 'datetime'
                 },
-
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y:,.0f}</b><br/>',
+                    shared: true
+                },
+                lang: {
+                    decimalPoint: '.',
+                    thousandsSep: ','
+                  },
+        
                 yAxis:
                     [{ // Primary yAxis
                         type: 'linear',
                         labels: {
                             format: '{value}',
                             style: {
-                                color: Highcharts.getOptions().colors[2]
+                                // color: Highcharts.getOptions().colors[1]
                             }
                         },
                         title: {
@@ -109,6 +129,7 @@ export class CovidChart extends Component {
                                 //   color: Highcharts.getOptions().colors[2]
                             }
                         },
+                    
                         //minorTickInterval: 0.1,
                         // accessibility: {
                         //   rangeDescription: 'Range: 0.1 to 1000'
@@ -129,6 +150,21 @@ export class CovidChart extends Component {
                             }
                         },
                         opposite: true
+                    }, { // Secondary yAxis
+                        type: 'linear',
+                        labels: {
+                            format: '{value}',
+                            style: {
+                                //   color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        title: {
+                            text: '7-Day Moving Average',
+                            style: {
+                                //  color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        opposite: false
                     }
 
                     ],
