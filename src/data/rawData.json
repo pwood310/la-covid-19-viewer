@@ -424,5 +424,11 @@
         "date": "2020-05-23",
         "deaths": 2090,
         "parseType": "first"
+    },
+    {
+        "confirmedCases": 44988,
+        "date": "2020-05-24",
+        "deaths": 2104,
+        "parseType": "first"
     }
 ]
