@@ -454,5 +454,29 @@
         "date": "2020-05-28",
         "deaths": 2241,
         "parseType": "first"
+    },
+    {
+        "confirmedCases": 51562,
+        "date": "2020-05-29",
+        "deaths": 2241,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 53651,
+        "date": "2020-05-30",
+        "deaths": 2338,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 54996,
+        "date": "2020-05-31",
+        "deaths": 2362,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 55968,
+        "date": "2020-06-01",
+        "deaths": 2384,
+        "parseType": "first"
     }
 ]
