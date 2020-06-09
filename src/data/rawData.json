@@ -478,5 +478,47 @@
         "date": "2020-06-01",
         "deaths": 2384,
         "parseType": "first"
+    },
+    {
+        "confirmedCases": 57118,
+        "date": "2020-06-02",
+        "deaths": 2443,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 58234,
+        "date": "2020-06-03",
+        "deaths": 2489,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 59650,
+        "date": "2020-06-04",
+        "deaths": 2531,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 61045,
+        "date": "2020-06-05",
+        "deaths": 2565,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 62338,
+        "date": "2020-06-06",
+        "deaths": 2620,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 63844,
+        "date": "2020-06-07",
+        "deaths": 2645,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 64644,
+        "date": "2020-06-08",
+        "deaths": 2655,
+        "parseType": "first"
     }
 ]
