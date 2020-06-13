@@ -520,5 +520,29 @@
         "date": "2020-06-08",
         "deaths": 2655,
         "parseType": "first"
+    },
+    {
+        "confirmedCases": 65822,
+        "date": "2020-06-09",
+        "deaths": 2707,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 67064,
+        "date": "2020-06-10",
+        "deaths": 2768,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 68875,
+        "date": "2020-06-11",
+        "deaths": 2813,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 70476,
+        "date": "2020-06-12",
+        "deaths": 2832,
+        "parseType": "first"
     }
 ]
