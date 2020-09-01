@@ -1,5 +1,23 @@
 [
     {
+        "confirmedCases": null,
+        "date": "2020-03-11",
+        "deaths": null,
+        "parseType": null
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-12",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-13",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
         "confirmedCases": 53,
         "date": "2020-03-14",
         "deaths": 0,
@@ -636,10 +654,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 95371,
+        "confirmedCases": 97894,
         "date": "2020-06-28",
-        "deaths": 3285,
-        "parseType": "duplicate"
+        "deaths": 3305,
+        "parseType": "first"
     },
     {
         "confirmedCases": 100772,
@@ -684,10 +702,10 @@
         "parseType": "duplicate"
     },
     {
-        "confirmedCases": 107667,
+        "confirmedCases": 116570,
         "date": "2020-07-06",
-        "deaths": 3454,
-        "parseType": "duplicate"
+        "deaths": 3534,
+        "parseType": "first"
     },
     {
         "confirmedCases": 120539,
@@ -726,10 +744,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 133549,
+        "confirmedCases": 136129,
         "date": "2020-07-13",
-        "deaths": 3809,
-        "parseType": "duplicate"
+        "deaths": 3822,
+        "parseType": "first"
     },
     {
         "confirmedCases": 140307,
@@ -738,10 +756,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 140307,
+        "confirmedCases": 143009,
         "date": "2020-07-15",
-        "deaths": 3894,
-        "parseType": "duplicate"
+        "deaths": 3932,
+        "parseType": "first"
     },
     {
         "confirmedCases": 147468,
@@ -768,10 +786,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 155887,
+        "confirmedCases": 159045,
         "date": "2020-07-20",
-        "deaths": 4095,
-        "parseType": "duplicate"
+        "deaths": 4104,
+        "parseType": "first"
     },
     {
         "confirmedCases": 161673,
@@ -792,10 +810,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 166848,
+        "confirmedCases": 168757,
         "date": "2020-07-24",
-        "deaths": 4262,
-        "parseType": "duplicate"
+        "deaths": 4300,
+        "parseType": "first"
     },
     {
         "confirmedCases": 172325,
@@ -804,10 +822,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 172325,
+        "confirmedCases": 173995,
         "date": "2020-07-26",
-        "deaths": 4351,
-        "parseType": "duplicate"
+        "deaths": 4360,
+        "parseType": "first"
     },
     {
         "confirmedCases": 176028,
@@ -849,6 +867,180 @@
         "confirmedCases": 192167,
         "date": "2020-08-02",
         "deaths": 4692,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 192167,
+        "date": "2020-08-03",
+        "deaths": 4692,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": 195614,
+        "date": "2020-08-04",
+        "deaths": 4758,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 197912,
+        "date": "2020-08-05",
+        "deaths": 4825,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 201106,
+        "date": "2020-08-06",
+        "deaths": 4869,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 204167,
+        "date": "2020-08-07",
+        "deaths": 4918,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 206761,
+        "date": "2020-08-08",
+        "deaths": 4967,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 208528,
+        "date": "2020-08-09",
+        "deaths": 4977,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 210424,
+        "date": "2020-08-10",
+        "deaths": 4996,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 211808,
+        "date": "2020-08-11",
+        "deaths": 5057,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 214197,
+        "date": "2020-08-12",
+        "deaths": 5109,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 216139,
+        "date": "2020-08-13",
+        "deaths": 5171,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 218693,
+        "date": "2020-08-14",
+        "deaths": 5214,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 220762,
+        "date": "2020-08-15",
+        "deaths": 5245,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 221950,
+        "date": "2020-08-16",
+        "deaths": 5245,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 223131,
+        "date": "2020-08-17",
+        "deaths": 5273,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 224031,
+        "date": "2020-08-18",
+        "deaths": 5335,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 224031,
+        "date": "2020-08-19",
+        "deaths": 5392,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 227346,
+        "date": "2020-08-20",
+        "deaths": 5446,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 229054,
+        "date": "2020-08-21",
+        "deaths": 5491,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 230662,
+        "date": "2020-08-22",
+        "deaths": 5537,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 231695,
+        "date": "2020-08-23",
+        "deaths": 5545,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 232893,
+        "date": "2020-08-24",
+        "deaths": 5558,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 233777,
+        "date": "2020-08-25",
+        "deaths": 5605,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 235386,
+        "date": "2020-08-26",
+        "deaths": 5663,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 236986,
+        "date": "2020-08-27",
+        "deaths": 5701,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 238458,
+        "date": "2020-08-28",
+        "deaths": 5732,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 239756,
+        "date": "2020-08-29",
+        "deaths": 5759,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 240749,
+        "date": "2020-08-30",
+        "deaths": 5769,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 241768,
+        "date": "2020-08-31",
+        "deaths": 5784,
         "parseType": "first"
     }
 ]
