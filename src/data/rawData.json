@@ -1,6 +1,48 @@
 [
     {
         "confirmedCases": null,
+        "date": "2020-03-04",
+        "deaths": null,
+        "parseType": null
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-05",
+        "deaths": null,
+        "parseType": null
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-06",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-07",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-08",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-09",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": null,
+        "date": "2020-03-10",
+        "deaths": null,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": null,
         "date": "2020-03-11",
         "deaths": null,
         "parseType": null
@@ -870,10 +912,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 192167,
+        "confirmedCases": 193788,
         "date": "2020-08-03",
-        "deaths": 4692,
-        "parseType": "duplicate"
+        "deaths": 4701,
+        "parseType": "first"
     },
     {
         "confirmedCases": 195614,
@@ -1041,6 +1083,48 @@
         "confirmedCases": 241768,
         "date": "2020-08-31",
         "deaths": 5784,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 242521,
+        "date": "2020-09-01",
+        "deaths": 5829,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 243935,
+        "date": "2020-09-02",
+        "deaths": 5878,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 244999,
+        "date": "2020-09-03",
+        "deaths": 5932,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 246407,
+        "date": "2020-09-04",
+        "deaths": 5977,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 247542,
+        "date": "2020-09-05",
+        "deaths": 6000,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 248334,
+        "date": "2020-09-06",
+        "deaths": 6005,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 248821,
+        "date": "2020-09-07",
+        "deaths": 6030,
         "parseType": "first"
     }
 ]

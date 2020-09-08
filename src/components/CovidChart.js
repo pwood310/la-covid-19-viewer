@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import _ from "lodash";
-import rawData from "./data/rawData.json";
+import rawData from "../data/rawData.json";
 
 Highcharts.setOptions({
     lang: {
