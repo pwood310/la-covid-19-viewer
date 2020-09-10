@@ -3,20 +3,31 @@ import React, { Component } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import _ from "lodash";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+
 import rawData from "../data/rawData.json";
 
 Highcharts.setOptions({
-    lang: {
-      thousandsSep: ','
-    }
-  });
+  lang: {
+    thousandsSep: ",",
+  },
+});
+
+const useStyles = (theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+});
 
 function capitalizeFirstLetter(s) {
   if (!s || typeof s != "string") return s;
   return s.slice(0, 1).toUpperCase() + s.slice(1);
 }
 
-export class CovidChart extends Component {
+class CovidChart extends Component {
   extractDifferenceArray(rawDataArray, labelName) {
     return rawDataArray.map((item, index, arr) => {
       return index === 0
@@ -109,8 +120,8 @@ export class CovidChart extends Component {
     // props: covidType: [ deaths, confirmedCases ]
     //        initScaleAsLog: [ true, false ]
 
-    console.log("props=", props);
-
+    //console.log("props=", props);
+    
     this.state = {
       // To avoid unnecessary update keep all options in the state.
       chartOptions: {
@@ -221,6 +232,8 @@ export class CovidChart extends Component {
     this.setState(newState);
   };
 
+  
+
   render() {
     //console.log("render called");
     const { chartOptions, hoverData } = this.state;
@@ -230,10 +243,12 @@ export class CovidChart extends Component {
       <div>
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
         {/* <h3>Hovering over {hoverData}</h3> */}
-        <button onClick={this.toggleCumulativeScale.bind(this)}>
+        <Button onClick={this.toggleCumulativeScale.bind(this)} variant="contained" color="Primary" >
           Toggle Cumulative Scale
-        </button>
+        </Button>
       </div>
     );
   }
 }
+
+export default withStyles(useStyles)(CovidChart)
