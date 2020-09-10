@@ -1126,5 +1126,23 @@
         "date": "2020-09-07",
         "deaths": 6030,
         "parseType": "first"
+    },
+    {
+        "confirmedCases": 249241,
+        "date": "2020-09-08",
+        "deaths": 6036,
+        "parseType": "first"
+    },
+    {
+        "confirmedCases": 249241,
+        "date": "2020-09-09",
+        "deaths": 6036,
+        "parseType": "duplicate"
+    },
+    {
+        "confirmedCases": 249859,
+        "date": "2020-09-10",
+        "deaths": 6090,
+        "parseType": "first"
     }
 ]
