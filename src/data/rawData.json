@@ -1134,10 +1134,10 @@
         "parseType": "first"
     },
     {
-        "confirmedCases": 249241,
+        "confirmedCases": 249859,
         "date": "2020-09-09",
-        "deaths": 6036,
-        "parseType": "duplicate"
+        "deaths": 6090,
+        "parseType": "first"
     },
     {
         "confirmedCases": 249859,
