@@ -221,13 +221,16 @@ class CovidChart extends Component {
     this.setState({ hoverData: e.target.id });
   };
 
+  getToggledScaleName = () => {
+    return this.state.chartOptions.yAxis[1].type === "logarithmic"
+    ? "linear"
+    : "logarithmic";
+  }
+
   toggleCumulativeScale = () => {
     //  The chart is updated only with new options.
-    let newScalingType =
-      this.state.chartOptions.yAxis[1].type === "logarithmic"
-        ? "linear"
-        : "logarithmic";
-    let newState = _.cloneDeep(this.state);
+    let newScalingType =this.getToggledScaleName();
+     let newState = _.cloneDeep(this.state);
     newState.chartOptions.yAxis[1].type = newScalingType;
     this.setState(newState);
   };
@@ -236,15 +239,16 @@ class CovidChart extends Component {
 
   render() {
     //console.log("render called");
-    const { chartOptions, hoverData } = this.state;
+    // const { chartOptions, hoverData } = this.state;
+    const { chartOptions } = this.state;
     this.setSeriesData(chartOptions);
 
     return (
       <div>
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
         {/* <h3>Hovering over {hoverData}</h3> */}
-        <Button onClick={this.toggleCumulativeScale.bind(this)} variant="contained" color="Primary" >
-          Toggle Cumulative Scale
+        <Button onClick={this.toggleCumulativeScale.bind(this)} variant="contained" color="secondary" >
+          Cumulative Scale: {this.state.chartOptions.yAxis[1].type} 
         </Button>
       </div>
     );
