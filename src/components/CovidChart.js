@@ -93,11 +93,9 @@ class CovidChart extends Component {
         name: "Daily",
         data: dailyValues,
         type: "column",
-        // lang: {
-        //     thousandsSep: ','
-        // }
       },
     ];
+
 
     chartOptions.series.push({
       yAxis: 1,
@@ -112,6 +110,7 @@ class CovidChart extends Component {
       data: avgValues,
       type: "spline",
     });
+
   }
 
   constructor(props) {
@@ -121,12 +120,20 @@ class CovidChart extends Component {
     //        initScaleAsLog: [ true, false ]
 
     //console.log("props=", props);
-    
+
     this.state = {
       // To avoid unnecessary update keep all options in the state.
       chartOptions: {
         chart: {
           type: "spline",
+          renderTo: "container",
+          // animation: false,
+          spacingTop: 0,
+          spacingRight: 0,
+          spacingBottom: 0,
+          spacingLeft: 0,
+          // plotBorderWidth: 0,
+          //  margin: [0,0,85,85]
         },
         title: {
           text: capitalizeFirstLetter(this.props.covidType),
@@ -157,6 +164,7 @@ class CovidChart extends Component {
               text: "Daily",
               style: {
                 //   color: Highcharts.getOptions().colors[2]
+                // fontSize: "8px"
               },
             },
 
@@ -179,6 +187,7 @@ class CovidChart extends Component {
               text: "Cumulative",
               style: {
                 //  color: Highcharts.getOptions().colors[0]
+                //     fontSize: "8px"
               },
             },
             opposite: true,
@@ -200,6 +209,7 @@ class CovidChart extends Component {
             },
             opposite: false,
           },
+
         ],
         plotOptions: {
           series: {
@@ -223,19 +233,17 @@ class CovidChart extends Component {
 
   getToggledScaleName = () => {
     return this.state.chartOptions.yAxis[1].type === "logarithmic"
-    ? "linear"
-    : "logarithmic";
-  }
+      ? "linear"
+      : "logarithmic";
+  };
 
   toggleCumulativeScale = () => {
     //  The chart is updated only with new options.
-    let newScalingType =this.getToggledScaleName();
-     let newState = _.cloneDeep(this.state);
+    let newScalingType = this.getToggledScaleName();
+    let newState = _.cloneDeep(this.state);
     newState.chartOptions.yAxis[1].type = newScalingType;
     this.setState(newState);
   };
-
-  
 
   render() {
     //console.log("render called");
@@ -244,15 +252,22 @@ class CovidChart extends Component {
     this.setSeriesData(chartOptions);
 
     return (
-      <div>
+      <div className="OUTOUTOUTcontaikner5">
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
         {/* <h3>Hovering over {hoverData}</h3> */}
-        <Button onClick={this.toggleCumulativeScale.bind(this)} variant="contained" color="secondary" >
-          Cumulative Scale: {this.state.chartOptions.yAxis[1].type} 
+        <Button
+          onClick={this.toggleCumulativeScale.bind(this)}
+          variant="outlined"
+          color="primary"
+          size="small"
+
+        >
+          {/* Cumulative Scale: {this.state.chartOptions.yAxis[1].type} */}
+          Toggle Cumulative Scale
         </Button>
       </div>
     );
   }
 }
 
-export default withStyles(useStyles)(CovidChart)
+export default withStyles(useStyles)(CovidChart);
