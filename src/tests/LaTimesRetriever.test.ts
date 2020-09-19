@@ -1,6 +1,6 @@
 import React from 'react';
 //import { render } from '@testing-library/react';
-import LaTimesRetriever from '../lib/laTimesRetriever';
+import LaTimesRetriever from '../lib/LaTimesRetriever';
 
 test('retrieves the data I want', async (done) => {
   // const retriever = new LaTimesRetriever("latimes-county-totals.csv");
