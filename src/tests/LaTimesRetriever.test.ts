@@ -3,12 +3,12 @@ import React from 'react';
 import LaTimesRetriever from '../lib/LaTimesRetriever';
 
 describe("Retriever parsing", () => {
-  // test('retrieves the data I want', async (done) => {
-  //   const retriever = new LaTimesRetriever("latimes-county-totals.csv");
-  //   const result = await retriever.retrieve();
-  //   expect("foo").toBe('foo')
-  //   done()
-  // });
+   test('retrieves the data I want', async (done) => {
+     const retriever = new LaTimesRetriever("latimes-county-totals.csv");
+     const result = await retriever.retrieve();
+     expect("foo").toBe('foo')
+     done()
+   });
 
   test('transforms csv to array of objects', async (done) => {
     const retriever = new LaTimesRetriever("something");
@@ -19,7 +19,7 @@ describe("Retriever parsing", () => {
 2020-01-26,Yolo,113,0,0,,
 `
     const result = await retriever.transformCSVToObjects(input);
-    console.log("here is result", result)
+    
     expect(result.length).toBe(4)
     const la = result[1];
     expect(la['county']).toBe("Los Angeles");
@@ -48,7 +48,7 @@ describe("Retriever parsing", () => {
       }
     );
 
-    console.log(JSON.stringify(result))
+//    console.log(JSON.stringify(result))
     done()
   });
 });

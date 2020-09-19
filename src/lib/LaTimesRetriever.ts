@@ -24,24 +24,28 @@ class LaTimesRetriever {
   }
 
   async retrieve(refresh: boolean = false): Promise<object[]> {
-    if (this.endpointData && !refresh && this.isReady)
+    if (this.endpointData && this.endpointData.length && this.isReady && !refresh)
       return [...this.endpointData];
 
     // TODO: race condition
     this.endpointData = [];
     this.isReady = false;
     const uri = `${this.uriBase}/${this.endpoint}`;
-    console.log("Querying ", uri);
-    const result = await axios(uri);
-    console.log("got header", result.data[0]);
-    console.log("got data", result.data[1]);
-
-    const transformed = await this.transformCSVToObjects(result.data);
-    this.endpointData = transformed;
-
-
-    this.isReady = true;
-    return [...this.endpointData];
+    try {
+      const result = await axios(uri);
+      if (!result || result.status != 200) {
+        console.error("bad status from axios: ", result ? result.status : result);
+        throw new Error(`Can't retrieve ${uri}`);
+      }
+      const transformed = await this.transformCSVToObjects(result.data);
+      this.endpointData = transformed;
+      this.isReady = true;
+      return [...this.endpointData];
+    }
+    catch (e) {
+      console.error(`retrieve: caught error: ${e}`);
+      throw e;
+    }
   }
 
   async transformCSVToObjects(csvString: string): Promise<any[]> {

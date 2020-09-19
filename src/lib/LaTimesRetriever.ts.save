@@ -1,0 +1,100 @@
+import axios from "axios";
+import csvParse from "csv-parse";
+import fs from "fs";
+
+const URIBase =
+  "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
+
+const CountyTotalSelector = "latimes-county-totals.csv";
+
+class LaTimesRetriever {
+  endpointData: object[];
+  uriBase: string | undefined;
+  endpoint: string;
+  isReady: boolean;
+
+  constructor(endpoint: string, uriBase?: string) {
+    this.endpointData = [];
+    // if (typeof endpoint === 'undefined')
+    //   throw new Error("Yow!");
+    this.endpoint = endpoint.match(/\.csv$/) ? endpoint : endpoint + '.csv';
+
+    this.uriBase = uriBase ?? URIBase;
+    this.isReady = false;
+  }
+
+  async retrieve(refresh: boolean = false): Promise<object[]> {
+    if (this.endpointData && !refresh && this.isReady)
+      return [...this.endpointData];
+
+    // TODO: race condition
+    this.endpointData = [];
+    this.isReady = false;
+    const uri = `${this.uriBase}/${this.endpoint}`;
+    console.log("Querying ", uri);
+    const result = await axios(uri);
+    console.log("got header", result.data[0]);
+    console.log("got data", result.data[1]);
+
+    const transformed = await this.transformCSVToObject(result.data);
+    this.endpointData = transformed;
+
+
+    this.isReady = true;
+    return [...this.endpointData];
+  }
+
+
+  async transformCSVToObject(csvString: string): Promise<any[]> {
+    const namesToTypes: Map<string, string> = new Map([
+      ["date", "date"],
+      ["county", "string"],
+      ["fips", "string"]
+    ]);
+
+    return new Promise((resolve, reject) => {
+      csvParse(csvString, {
+        comment: '#',
+        columns: true
+      }, (err, output) => {
+
+        if (err)
+          return reject(err);
+
+        const json = JSON.stringify(output);
+        resolve(JSON.parse(json, (key, value) => {
+          const type = namesToTypes.get(key) ?? "number"
+          switch (type) {
+            case 'date':
+              return new Date(value);
+              break;
+
+            case 'string':
+              return value;
+              break;
+
+            case 'number':
+              if (value === '')
+                return "sam";
+
+                try {
+                  console.log('parsing' + value)
+                  return Number(value);
+                }
+                catch(e) {
+                  console.log(`Caught error parsing ${key} -> ${value}`)
+                  return "fred";
+                }
+              break;
+
+            default:
+              throw new Error(`Can't hydrate type ${type} for column ${key}`)
+          }
+
+        }));
+      });
+    });
+  }
+}
+
+export default LaTimesRetriever;
