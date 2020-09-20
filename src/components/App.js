@@ -11,7 +11,7 @@ const App = () => {
   // function onChoice(mapType) {
   //   console.log("chose ", mapType);
   // }
-  const confirmedChart =  <CovidChart covidType="confirmedCases" />
+  const confirmedChart =  <CovidChart covidType="confirmed_cases" />
   const deathsChart =  <CovidChart covidType="deaths" />
 
   return (
@@ -24,7 +24,7 @@ const App = () => {
         <ChartChooserWithTabs confirmedChart={confirmedChart} deathsChart={deathsChart} />
       </div>
       {/* <div className="container5">
-        <CovidChart covidType="confirmedCases" />
+        <CovidChart covidType="confirmed_cases" />
       </div>
 
       <div className="container5b">

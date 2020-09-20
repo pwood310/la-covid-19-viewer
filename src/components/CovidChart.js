@@ -116,7 +116,7 @@ class CovidChart extends Component {
   constructor(props) {
     super(props);
 
-    // props: covidType: [ deaths, confirmedCases ]
+    // props: covidType: [ deaths, confirmed_cases ]
     //        initScaleAsLog: [ true, false ]
 
     //console.log("props=", props);

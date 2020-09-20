@@ -6,7 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
 function ChartChooser(props) {
-  const [value, setValue] = React.useState("confirmedCases");
+  const [value, setValue] = React.useState("confirmed_cases");
 
   const handleChange = (event) => {
     setValue(event.target.value);
