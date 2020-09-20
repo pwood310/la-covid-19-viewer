@@ -1,12 +1,8 @@
-import LATimesRetriever from "./LATimesRetriever";
+import { IDataCache } from "./IDataCache";
+import { LATimesRetriever } from "./LATimesRetriever";
 
-interface IDataCache {
-    get(refresh?: boolean): Promise<any[]>;
-}
-
-class CaliCountyTotalsCache implements IDataCache {
-    readonly CountyTotalsSelector:string = "latimes-county-totals.csv";
-
+export class CaliCountyTotalsCache implements IDataCache {
+    readonly CountyTotalsSelector: string = "latimes-county-totals.csv";
     retriever: LATimesRetriever;
 
 
@@ -17,5 +13,4 @@ class CaliCountyTotalsCache implements IDataCache {
     async get(refresh?: boolean): Promise<any[]> {
         return this.retriever.retrieve(refresh);
     }
-
 }

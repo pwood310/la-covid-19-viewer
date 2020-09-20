@@ -1,6 +1,6 @@
 import React from 'react';
 //import { render } from '@testing-library/react';
-import CSVToObjectTransformer from '../lib/CSVToObjectTransformer';
+import { CSVToObjectTransformer } from '../lib/CSVToObjectTransformer';
 
 describe("Retriever parsing", () => {
 
@@ -70,7 +70,7 @@ describe("Retriever parsing", () => {
         "new_deaths": "6"
       }
     );
-  
+
     //    console.log(JSON.stringify(result))
     done()
   });
