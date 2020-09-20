@@ -8,44 +8,53 @@ const URIBase =
 const CountyTotalSelector = "latimes-county-totals.csv";
 
 class LaTimesRetriever {
-  endpointData: object[];
   uriBase: string | undefined;
   endpoint: string;
-  isReady: boolean;
+  thePromise: Promise<object[]> | null;
+  isInProgress: boolean;
 
   constructor(endpoint: string, uriBase?: string) {
-    this.endpointData = [];
-    // if (typeof endpoint === 'undefined')
-    //   throw new Error("Yow!");
     this.endpoint = endpoint.match(/\.csv$/) ? endpoint : endpoint + '.csv';
 
     this.uriBase = uriBase ?? URIBase;
-    this.isReady = false;
+    this.isInProgress = true;
+    this.thePromise = null;
+
   }
 
   async retrieve(refresh: boolean = false): Promise<object[]> {
-    if (this.endpointData && this.endpointData.length && this.isReady && !refresh)
-      return [...this.endpointData];
 
-    // TODO: race condition
-    this.endpointData = [];
-    this.isReady = false;
-    const uri = `${this.uriBase}/${this.endpoint}`;
-    try {
-      const result = await axios(uri);
-      if (!result || result.status != 200) {
-        console.error("bad status from axios: ", result ? result.status : result);
-        throw new Error(`Can't retrieve ${uri}`);
+    if (this.thePromise !== null) {
+      if (!refresh || this.isInProgress)
+        return this.thePromise;
+    }
+
+    this.isInProgress = true;
+    this.thePromise = new Promise ( async (resolve, reject) => {
+
+      const uri = `${this.uriBase}/${this.endpoint}`;
+      try {
+        const result = await axios(uri);
+        if (!result || result.status != 200) {
+          console.error("bad status from axios retrieve: ", result ? result.status : result);
+          this.isInProgress = false;
+          return reject(new Error(`Can't retrieve ${uri}`));
+        }
+
+        const transformed = await this.transformCSVToObjects(result.data);
+        this.isInProgress = false;
+        this.thePromise = null;
+        resolve(transformed);
       }
-      const transformed = await this.transformCSVToObjects(result.data);
-      this.endpointData = transformed;
-      this.isReady = true;
-      return [...this.endpointData];
-    }
-    catch (e) {
-      console.error(`retrieve: caught error: ${e}`);
-      throw e;
-    }
+      catch (e) {
+        this.isInProgress = false;
+        this.thePromise = null;
+        console.error(`retrieve: caught error: ${e}`);
+        reject(e)
+      }
+
+    });
+    return this.thePromise;
   }
 
   async transformCSVToObjects(csvString: string): Promise<any[]> {
