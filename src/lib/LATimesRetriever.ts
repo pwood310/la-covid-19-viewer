@@ -1,12 +1,10 @@
 import axios from "axios";
-import CSVToObjectTransformer from "./CSVToObjectTransformer";
+import { CSVToObjectTransformer } from "./CSVToObjectTransformer";
 
 const URIBase =
   "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
 
-const CountyTotalSelector = "latimes-county-totals.csv";
-
-class LATimesRetriever {
+export class LATimesRetriever {
   uriBase: string | undefined;
   endpoint: string;
   thePromise: Promise<object[]> | null;
@@ -15,12 +13,10 @@ class LATimesRetriever {
 
   constructor(endpoint: string, uriBase?: string) {
     this.endpoint = endpoint.match(/\.csv$/) ? endpoint : endpoint + '.csv';
-
     this.uriBase = uriBase ?? URIBase;
     this.isInProgress = true;
     this.thePromise = null;
     this.csvTransformer = new CSVToObjectTransformer();
-
   }
 
   async retrieve(refresh: boolean = false): Promise<object[]> {
@@ -58,5 +54,3 @@ class LATimesRetriever {
     return this.thePromise;
   }
 }
-
-export default LATimesRetriever;

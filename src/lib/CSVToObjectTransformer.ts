@@ -1,6 +1,6 @@
 import csvParse from "csv-parse";
 
-class CSVToObjectTransformer {
+export class CSVToObjectTransformer {
 
     readonly DefaultNameToTypeInitializer: [string, string][] = [
         ["date", "date"],
@@ -64,5 +64,3 @@ class CSVToObjectTransformer {
         });
     }
 }
-
-export default CSVToObjectTransformer;
