@@ -1,6 +1,5 @@
 import axios from "axios";
 import csvParse from "csv-parse";
-import fs from "fs";
 
 const URIBase =
   "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
