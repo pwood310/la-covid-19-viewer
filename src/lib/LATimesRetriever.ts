@@ -6,7 +6,7 @@ const URIBase =
 
 const CountyTotalSelector = "latimes-county-totals.csv";
 
-class LaTimesRetriever {
+class LATimesRetriever {
   uriBase: string | undefined;
   endpoint: string;
   thePromise: Promise<object[]> | null;
@@ -59,4 +59,4 @@ class LaTimesRetriever {
   }
 }
 
-export default LaTimesRetriever;
+export default LATimesRetriever;
