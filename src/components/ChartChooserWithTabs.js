@@ -10,6 +10,7 @@ import Box from '@material-ui/core/Box';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
+  console.log('chartchooserwithtabs redrawing')
   return (
     <div
       role="tabpanel"

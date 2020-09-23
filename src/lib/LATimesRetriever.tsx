@@ -7,50 +7,59 @@ const URIBase =
 export class LATimesRetriever {
   uriBase: string | undefined;
   endpoint: string;
-  thePromise: Promise<object[]> | null;
+  thePromise: Promise<object[]> | undefined;
   isInProgress: boolean;
   csvTransformer: CSVToObjectTransformer;
 
   constructor(endpoint: string, uriBase?: string) {
-    this.endpoint = endpoint.match(/\.csv$/) ? endpoint : endpoint + '.csv';
+    console.log("constructor called for LATimesRetriever");
+    this.endpoint = endpoint.match(/\.csv$/) ? endpoint : endpoint + ".csv";
     this.uriBase = uriBase ?? URIBase;
     this.isInProgress = true;
-    this.thePromise = null;
+    this.thePromise = undefined;
     this.csvTransformer = new CSVToObjectTransformer();
   }
 
   async retrieve(refresh: boolean = false): Promise<object[]> {
-
-    if (this.thePromise !== null) {
-      if (!refresh || this.isInProgress)
+    console.log(`typeof promise? ${typeof this.thePromise}`);
+    if (typeof(this.thePromise) !== "undefined") {
+      if (!refresh || this.isInProgress) {
+        console.log('returning existing promise');
         return this.thePromise;
+      }
     }
 
-    this.isInProgress = true;
-    this.thePromise = new Promise(async (resolve, reject) => {
-
+    let that = this;
+    that.isInProgress = true;
+    let aPromise = new Promise<object[]>(async (resolve, reject) => {
       const uri = `${this.uriBase}/${this.endpoint}`;
       try {
+        console.log("calling axios!");
         const result = await axios(uri);
-        if (!result || result.status != 200) {
-          console.error("bad status from axios retrieve: ", result ? result.status : result);
-          this.isInProgress = false;
+        if (!result || result.status !== 200) {
+          console.error(
+            "bad status from axios retrieve: ",
+            result ? result.status : result
+          );
+          that.isInProgress = false;
           return reject(new Error(`Can't retrieve ${uri}`));
         }
 
         const transformed = await this.csvTransformer.transform(result.data);
-        this.isInProgress = false;
-        this.thePromise = null;
+        that.isInProgress = false;
+        that.thePromise = undefined;
         resolve(transformed);
-      }
-      catch (e) {
-        this.isInProgress = false;
-        this.thePromise = null;
+      } catch (e) {
+        that.isInProgress = false;
+        that.thePromise = undefined;
         console.error(`retrieve: caught error: ${e}`);
-        reject(e)
+        reject(e);
       }
-
     });
-    return this.thePromise;
+    
+    if (this.isInProgress)
+      this.thePromise = aPromise;
+
+    return aPromise;
   }
 }

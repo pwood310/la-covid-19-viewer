@@ -6,6 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
 function ChartChooser(props) {
+  console.log("chartchooser redrawing");
   const [value, setValue] = React.useState("confirmed_cases");
 
   const handleChange = (event) => {
@@ -24,7 +25,7 @@ function ChartChooser(props) {
         onChange={handleChange}
       >
         <FormControlLabel
-          value="confirmedCases"
+          value="confirmed_cases"
           control={<Radio />}
           label="Confirmed Cases"
         />

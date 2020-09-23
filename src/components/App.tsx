@@ -6,13 +6,20 @@ import Footer from "./Footer";
 // import ChartChooser from "./ChartChooser";
 import ChartChooserWithTabs from "./ChartChooserWithTabs";
 import "../App.css";
+import { CaliCountyTotalsCache } from "../lib/CaliCountyTotalsCache";
 
 const App = () => {
   // function onChoice(mapType) {
   //   console.log("chose ", mapType);
   // }
-  const confirmedChart =  <CovidChart covidType="confirmed_cases" />
-  const deathsChart =  <CovidChart covidType="deaths" />
+  console.log('app redrawing')
+  const caliTotalsCache = new CaliCountyTotalsCache();
+  const confirmedChart = (
+    <CovidChart covidType="confirmed_cases" dataSource={caliTotalsCache} />
+  );
+  const deathsChart = (
+    <CovidChart covidType="deaths" dataSource={caliTotalsCache} />
+  );
 
   return (
     <div>
@@ -21,7 +28,10 @@ const App = () => {
       </header>
 
       <div className="AAAAAAcontainer5">
-        <ChartChooserWithTabs confirmedChart={confirmedChart} deathsChart={deathsChart} />
+        <ChartChooserWithTabs
+          confirmedChart={confirmedChart}
+          deathsChart={deathsChart}
+        />
       </div>
       {/* <div className="container5">
         <CovidChart covidType="confirmed_cases" />
@@ -30,7 +40,7 @@ const App = () => {
       <div className="container5b">
         <CovidChart covidType="deaths" />
       </div> */}
-      
+
       <div>
         <Footer />
       </div>
