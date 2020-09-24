@@ -1,14 +1,14 @@
 // import { render } from 'react-dom';
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-import _ from "lodash";
+//import _ from "lodash";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import { useQuery } from "react-query";
 
-//import {CaliCountyTotalsCache} from "../lib/CaliCountyTotalsCache";
 import { IDataCache } from "../lib/IDataCache";
-//import {CSVToObjectTransformer } from "../lib/CSVToObjectTransformer";
+import { LATimesRetriever } from "../lib/LATimesRetriever";
 
 Highcharts.setOptions({
   lang: {
@@ -30,7 +30,7 @@ function snakeToPascal(s: string) {
   s = capitalizeFirstLetter(s);
 
   let idx = s.indexOf("_");
-  while (idx != -1) {
+  while (idx !== -1) {
     s = s.slice(0, idx) + capitalizeFirstLetter(s.slice(idx + 1));
     idx = s.indexOf("_");
   }
@@ -48,7 +48,6 @@ type Props = {
 
 interface IState {
   cumulativeScale: any;
-  rawData: any[];
   hoverData: any;
 }
 
@@ -103,7 +102,7 @@ function createDifferentialRunningAverages(
   return { dailyValues, avgValues, cumulativeValues };
 }
 
-function setSeriesData(state: IState, props: Props, chartOptions: any) {
+function setSeriesData(rawData: any[], props: Props, chartOptions: any) {
   chartOptions.series = null;
   //console.log(chartOptions);
 
@@ -111,7 +110,7 @@ function setSeriesData(state: IState, props: Props, chartOptions: any) {
     dailyValues,
     avgValues,
     cumulativeValues,
-  } = createDifferentialRunningAverages(state.rawData, props.covidType);
+  } = createDifferentialRunningAverages(rawData, props.covidType);
 
   chartOptions.series = [
     {
@@ -137,9 +136,15 @@ function setSeriesData(state: IState, props: Props, chartOptions: any) {
   });
 }
 
-function fullyPopulateChartInfo(state: IState, props: Props): any {
+function fullyPopulateChartInfo(
+  rawData: any[],
+  state: IState,
+  props: Props
+): any {
+  if (!rawData || !rawData.length) return {};
+
   const chartOptions = createChartOptions(state, props);
-  setSeriesData(state, props, chartOptions);
+  setSeriesData(rawData, props, chartOptions);
   return chartOptions;
 }
 
@@ -251,33 +256,49 @@ function createChartOptions(state: IState, props: Props): any {
 function CovidChart(props: Props): any {
   const [state, setState] = useState<IState>({
     cumulativeScale: "linear",
-    hoverData: null,
-    rawData: [],
+    hoverData: null
   });
 
-  console.log(`CovidChart: right before useEffect: ${props.covidType}`);
+  console.log(`props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`)
 
-  useEffect(() => {
-    console.log("useEffect called");
-    props.dataSource
-      .get()
-      .then((rows) => {
+
+  function retrieveAndFilter(county: string): () => Promise<any[]> {
+    const retriever = new LATimesRetriever("latimes-county-totals.csv");
+
+    return async () => {
+      const niceData = await retriever.retrieve().then((rows) => {
         return rows
-          .filter((item) => item.county == "Los Angeles")
+          .filter((item) => item.county === county)
           .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
-      })
-      .then((filteredRows) => {
-        console.log(
-          `useEffect: filteredRows # ${filteredRows && filteredRows.length}`
-        );
-        const newState = { ...state };
-        newState.rawData = filteredRows;
-        console.log("useEffect: setState");
-
-        setState(newState);
       });
-  }, []);
+      return niceData;
+    };
+  }
 
+  const { isLoading, isError, data, error } = useQuery<any[], any>(
+    "laCountyData",
+    retrieveAndFilter("Los Angeles"),
+    {
+      staleTime: 5 * 60 * 1000,
+      retry: 2,
+    }
+  );
+
+  const rawData = data;
+  const memoizedChartOptions = useMemo(
+    () => fullyPopulateChartInfo(rawData, state, props),
+    [rawData, state, props]
+  );
+
+  if (isError || error) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  
   function setHoverData(e) {
     // The chart is not updated because `chartOptions` has not changed.
     //this.setState({ hoverData: e.target.category });
@@ -291,8 +312,6 @@ function CovidChart(props: Props): any {
   }
 
   function toggleCumulativeScale() {
-    //  The chart is updated only with new options.
-    // let newScalingType = getToggledScaleName(state.chartOptions.yAxis[1].type);
     let newScalingType = getToggledScaleName(state.cumulativeScale);
 
     let newState = { ...state, cumulativeScale: newScalingType };
@@ -301,14 +320,11 @@ function CovidChart(props: Props): any {
     setState(newState);
   }
 
-  console.log("CovidChart returning the new stuff");
-  // const { chartOptions, hoverData } = this.state;
-
-  const chartOptions = fullyPopulateChartInfo(state, props);
+  console.log("refreshing");
 
   return (
     <div className="OUTOUTOUTcontaikner5">
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions} />
       {/* <h3>Hovering over {hoverData}</h3> */}
       <Button
         onClick={toggleCumulativeScale.bind(this)}
