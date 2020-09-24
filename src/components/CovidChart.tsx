@@ -259,7 +259,7 @@ function CovidChart(props: Props): any {
     hoverData: null
   });
 
-  console.log(`props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`)
+  console.log(`CovidChart: props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`)
 
 
   function retrieveAndFilter(county: string): () => Promise<any[]> {
@@ -316,7 +316,7 @@ function CovidChart(props: Props): any {
 
     let newState = { ...state, cumulativeScale: newScalingType };
 
-    console.log("toggleCumulativeScale: setState");
+    console.log("toggleCumulativeScale: setState to", newScalingType);
     setState(newState);
   }
 

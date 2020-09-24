@@ -39,7 +39,6 @@ then
     exit 55
 fi
 
-exit
 
 /usr/local/bin/aws s3 sync build 's3://manylakes.io' --delete
 if [ "$?"-ne 0  ];

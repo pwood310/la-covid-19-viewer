@@ -1204,5 +1204,23 @@
         "date": "2020-09-20",
         "deaths": null,
         "parseType": null
+    },
+    {
+        "confirmed_cases": null,
+        "date": "2020-09-21",
+        "deaths": null,
+        "parseType": null
+    },
+    {
+        "confirmed_cases": null,
+        "date": "2020-09-22",
+        "deaths": null,
+        "parseType": null
+    },
+    {
+        "confirmed_cases": null,
+        "date": "2020-09-23",
+        "deaths": null,
+        "parseType": null
     }
 ]

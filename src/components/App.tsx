@@ -10,7 +10,7 @@ const App = () => {
   // function onChoice(mapType) {
   //   console.log("chose ", mapType);
   // }
-  console.log("app redrawing");
+  console.log('app redrawing');
   //const caliTotalsCache = new CaliCountyTotalsCache();
   // const confirmedChart = (
   //   <CovidChart covidType="confirmed_cases" dataSource={null} />
@@ -29,13 +29,10 @@ const App = () => {
         <ChartChooserWithTabs
           // confirmedChart={confirmedChart}
           // deathsChart={deathsChart}
-
-          confirmedChart={
-            <CovidChart covidType="confirmed_cases" dataSource={null} />
-          }
-          deathsChart={
-            <CovidChart covidType="confirmed_cases" dataSource={null} />
-          }
+        
+        confirmedChart={<CovidChart covidType="confirmed_cases" dataSource={null} />}
+        deathsChart={<CovidChart covidType="confirmed_cases" dataSource={null} />}
+        
         />
       </div>
 
