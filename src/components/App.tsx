@@ -31,7 +31,7 @@ const App = () => {
           // deathsChart={deathsChart}
         
         confirmedChart={<CovidChart covidType="confirmed_cases" dataSource={null} />}
-        deathsChart={<CovidChart covidType="confirmed_cases" dataSource={null} />}
+        deathsChart={<CovidChart covidType="deaths" dataSource={null} />}
         
         />
       </div>
