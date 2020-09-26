@@ -163,6 +163,7 @@ function createChartOptions(state: IState, props: Props): any {
       spacingRight: 0,
       spacingBottom: 0,
       spacingLeft: 0,
+      zoomType: 'x'
       // plotBorderWidth: 0,
       //  margin: [0,0,85,85]
     },
