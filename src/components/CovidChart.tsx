@@ -59,6 +59,15 @@ function extractDifferenceArray(rawDataArray, labelName) {
   });
 }
 
+function calculateDoublingDays(arr: number[], index: number) {
+  const prev = index !== 0 ? arr[index - 1] : 0;
+  const curr = arr[index];
+
+  const ratio = curr / prev;
+  // ratio = log(2)/log(ratio)
+  return Math.LN2 / Math.log(ratio);
+}
+
 function createDifferentialRunningAverages(
   arrayOfObj: any[],
   labelName: string
@@ -88,11 +97,14 @@ function createDifferentialRunningAverages(
   let avgValues = [];
   let dailyValues = [];
   let cumulativeValues = [];
+
   for (let i = 0; i < averagesArray.length; i++) {
     let date = new Date(arrayOfObj[i].date).valueOf();
 
+    let doublingDays = calculateDoublingDays(averagesArray, i);
+
     let dailyItem = { x: date, y: differenceArray[i] };
-    let avgItem = { x: date, y: averagesArray[i] };
+    let avgItem = { x: date, y: averagesArray[i], z: doublingDays };
     let cumulativeItem = { x: date, y: cumulativeArray[i] };
 
     dailyValues.push(dailyItem);
@@ -163,7 +175,7 @@ function createChartOptions(state: IState, props: Props): any {
       spacingRight: 0,
       spacingBottom: 0,
       spacingLeft: 0,
-      zoomType: 'x'
+      zoomType: "x",
       // plotBorderWidth: 0,
       //  margin: [0,0,85,85]
     },
@@ -174,7 +186,25 @@ function createChartOptions(state: IState, props: Props): any {
       type: "datetime",
     },
     tooltip: {
-      pointFormat: "{series.name}: <b>{point.y:,.0f}</b><br/>",
+      //pointFormat: "{series.name}: <b>{point.y:,.0f}</b><br/>",
+      formattRSAVE: function () {
+        return this.points.reduce(function (s, point) {
+          return s + "<br/>" + point.series.name + ": " + point.y + "m";
+        }, "<b>" + this.x + "</b>");
+      },
+      formatter: function () {
+        return this.points.reduce((s, point) => {
+          s += `<br/>${point.series.name}: <b>${point.y.toFixed(0)}</b>`;
+
+          if (point.point.z === undefined) return s;
+
+          let dRate = point.point.z;
+          dRate = isFinite(dRate) && dRate > 0 ? dRate.toFixed(0) : "-";
+          s += `<br/>Days to Double at Avg Rate: <b> ${dRate}</br>`;
+
+          return s;
+        }, "<small><em>" + new Date(this.x).toDateString() + "</em></small>");
+      },
       shared: true,
     },
     lang: {
@@ -257,11 +287,12 @@ function createChartOptions(state: IState, props: Props): any {
 function CovidChart(props: Props): any {
   const [state, setState] = useState<IState>({
     cumulativeScale: "linear",
-    hoverData: null
+    hoverData: null,
   });
 
-  console.log(`CovidChart: props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`)
-
+  console.log(
+    `CovidChart: props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`
+  );
 
   function retrieveAndFilter(county: string): () => Promise<any[]> {
     const retriever = new LATimesRetriever("latimes-county-totals.csv");
@@ -299,7 +330,6 @@ function CovidChart(props: Props): any {
     return <span>Loading...</span>;
   }
 
-  
   function setHoverData(e) {
     // The chart is not updated because `chartOptions` has not changed.
     //this.setState({ hoverData: e.target.category });
