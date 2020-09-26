@@ -199,7 +199,7 @@ function createChartOptions(state: IState, props: Props): any {
           if (point.point.z === undefined) return s;
 
           let dRate = point.point.z;
-          dRate = isFinite(dRate) && dRate > 0 ? dRate.toFixed(0) : "-";
+          dRate = !isNaN(dRate)  ? dRate.toFixed(0) : "-";
           s += `<br/>Days to Double at Avg Rate: <b> ${dRate}</br>`;
 
           return s;
