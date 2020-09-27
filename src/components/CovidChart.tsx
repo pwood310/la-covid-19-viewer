@@ -42,7 +42,7 @@ function capitalizeFirstLetter(s: string) {
 }
 
 type Props = {
-  dataSource: IDataCache;
+  county: string;
   covidType: string;
 };
 
@@ -290,33 +290,40 @@ function CovidChart(props: Props): any {
     hoverData: null,
   });
 
-  console.log(
-    `CovidChart: props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`
-  );
+  // console.log(
+  //   `CovidChart: props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`
+  // );
 
-  function retrieveAndFilter(county: string): () => Promise<any[]> {
-    const retriever = new LATimesRetriever("latimes-county-totals.csv");
+  function filterByCountyAndSortByDate(allCountyTotals:any[], county: string): any[] {
+    if (!allCountyTotals)
+      return null;
 
+    return  allCountyTotals.filter((item) => item.county === county)
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  }
+
+  function retrieve(filename: string): () => Promise<any[]> {
+    const retriever = new LATimesRetriever(filename);
     return async () => {
-      const niceData = await retriever.retrieve().then((rows) => {
-        return rows
-          .filter((item) => item.county === county)
-          .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
-      });
-      return niceData;
+      return await retriever.retrieve()
     };
   }
 
   const { isLoading, isError, data, error } = useQuery<any[], any>(
-    "laCountyData",
-    retrieveAndFilter("Los Angeles"),
+    "latimes-county-totals.csv",
+    retrieve("latimes-county-totals.csv"),
     {
       staleTime: 5 * 60 * 1000,
       retry: 2,
     }
   );
 
-  const rawData = data;
+  const rawData = useMemo(
+    () => filterByCountyAndSortByDate(data, props.county),
+    [data, state, props.county]
+  );
+
+
   const memoizedChartOptions = useMemo(
     () => fullyPopulateChartInfo(rawData, state, props),
     [rawData, state, props]
@@ -351,7 +358,7 @@ function CovidChart(props: Props): any {
     setState(newState);
   }
 
-  console.log("refreshing");
+  console.log(`Covid Chart redrawing for ${props.covidType}, ${props.county}`);
 
   return (
     <div className="OUTOUTOUTcontaikner5">

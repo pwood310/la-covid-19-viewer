@@ -11,7 +11,7 @@ export class LATimesRetriever {
   csvTransformer: CSVToObjectTransformer;
 
   constructor(endpoint: string, uriBase?: string) {
-    console.log("LATimesRetriever.ctor()");
+    //console.log("LATimesRetriever.ctor()");
     this.endpoint = endpoint.match(/\.csv$/) ? endpoint : endpoint + ".csv";
     this.uriBase = uriBase ?? URIBase;
     this.csvTransformer = new CSVToObjectTransformer();
