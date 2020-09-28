@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { LATimesRetriever, CountyTotalsType } from "../lib/LATimesRetriever";
 
@@ -22,11 +22,9 @@ import Select from "@material-ui/core/Select";
 type IProp = { defaultCounty?: string; onChange: (county: string) => void };
 
 function LACountySelector(props: IProp) {
-  const inputEl = useRef(null);
+  // seems not helping problem that only appears in dev mode  const inputEl = React.useRef(null);
   //const classes = useStyles();
-  const [county, setCounty] = useState(
-    props.defaultCounty ?? "Los Angeles"
-  );
+  const [county, setCounty] = useState(props.defaultCounty ?? "Los Angeles");
 
   function retrieve(): () => Promise<any[]> {
     const retriever = new LATimesRetriever();
@@ -82,7 +80,7 @@ function LACountySelector(props: IProp) {
         onChange={handleChange}
       >
         {justNames.map((cty, index) => (
-          <MenuItem ref={inputEl} key={index} value={cty}>
+          <MenuItem key={index} value={cty}>
             {cty}
           </MenuItem>
         ))}
