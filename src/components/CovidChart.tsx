@@ -7,8 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { useQuery } from "react-query";
 
-import { IDataCache } from "../lib/IDataCache";
-import { LATimesRetriever } from "../lib/LATimesRetriever";
+import { LATimesRetriever, CountyTotalsType } from "../lib/LATimesRetriever";
 
 Highcharts.setOptions({
   lang: {
@@ -199,7 +198,7 @@ function createChartOptions(state: IState, props: Props): any {
           if (point.point.z === undefined) return s;
 
           let dRate = point.point.z;
-          dRate = !isNaN(dRate)  ? dRate.toFixed(0) : "-";
+          dRate = !isNaN(dRate) ? dRate.toFixed(0) : "-";
           s += `<br/>Days to Double at Avg Rate: <b> ${dRate}</br>`;
 
           return s;
@@ -294,24 +293,27 @@ function CovidChart(props: Props): any {
   //   `CovidChart: props=${JSON.stringify(props)}, state=${JSON.stringify(state)}`
   // );
 
-  function filterByCountyAndSortByDate(allCountyTotals:any[], county: string): any[] {
-    if (!allCountyTotals)
-      return null;
+  function filterByCountyAndSortByDate(
+    allCountyTotals: any[],
+    county: string
+  ): any[] {
+    if (!allCountyTotals) return null;
 
-    return  allCountyTotals.filter((item) => item.county === county)
-    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    return allCountyTotals
+      .filter((item) => item.county === county)
+      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
   }
 
-  function retrieve(filename: string): () => Promise<any[]> {
-    const retriever = new LATimesRetriever(filename);
+  function retrieve(): () => Promise<CountyTotalsType[]> {
+    const retriever = new LATimesRetriever();
     return async () => {
-      return await retriever.retrieve()
+      return await retriever.retrieveCountyTotals();
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<any[], any>(
-    "latimes-county-totals.csv",
-    retrieve("latimes-county-totals.csv"),
+  const { isLoading, isError, data, error } = useQuery<CountyTotalsType[], any>(
+    "countyTotals",
+    retrieve(),
     {
       staleTime: 5 * 60 * 1000,
       retry: 2,
@@ -320,9 +322,8 @@ function CovidChart(props: Props): any {
 
   const rawData = useMemo(
     () => filterByCountyAndSortByDate(data, props.county),
-    [data, state, props.county]
+    [data, props.county]
   );
-
 
   const memoizedChartOptions = useMemo(
     () => fullyPopulateChartInfo(rawData, state, props),

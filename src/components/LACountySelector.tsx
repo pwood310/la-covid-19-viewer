@@ -1,6 +1,6 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useQuery } from "react-query";
-import { LATimesRetriever } from "../lib/LATimesRetriever";
+import { LATimesRetriever, CountyTotalsType } from "../lib/LATimesRetriever";
 
 // import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -23,36 +23,26 @@ type IProp = { defaultCounty?: string; onChange: (county: string) => void };
 
 function LACountySelector(props: IProp) {
   const inputEl = useRef(null);
-  //const [data, setData] = useState({ hits: [] });
   //const classes = useStyles();
-  const [county, setCounty] = React.useState(
+  const [county, setCounty] = useState(
     props.defaultCounty ?? "Los Angeles"
   );
 
-  function retrieve(filename: string): () => Promise<any[]> {
-    const retriever = new LATimesRetriever(filename);
+  function retrieve(): () => Promise<any[]> {
+    const retriever = new LATimesRetriever();
     return async () => {
-      return await retriever.retrieve();
+      return await retriever.retrieveCountyTotals();
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<any[], any>(
-    "latimes-county-totals.csv",
-    retrieve("latimes-county-totals.csv"),
+  const { isLoading, isError, data, error } = useQuery<CountyTotalsType[], any>(
+    "countyTotals",
+    retrieve(),
     {
       staleTime: 5 * 60 * 1000,
       retry: 2,
     }
   );
-
-  function retrieveAndSort(): () => Promise<any[]> {
-    const retriever = new LATimesRetriever("latimes-county-totals.csv");
-
-    return async () => {
-      const all = await retriever.retrieve();
-      return all;
-    };
-  }
 
   if (isError || error) {
     return <span>Error: {error.message}</span>;
