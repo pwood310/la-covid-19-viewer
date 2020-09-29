@@ -5,9 +5,12 @@ import CovidChart from "./CovidChart";
 import Footer from "./Footer";
 import "../App.css";
 import LACountySelector from "./LACountySelector";
+import PlaceSelector from "./PlaceSelector";
+import CovidChartPlace from "./CovidChartPlace";
 
 const App = () => {
   const [county, setCounty] = React.useState("Los Angeles");
+  const [place, setPlace] = React.useState("Santa Monica");
 
   console.log("app redrawing");
   
@@ -23,7 +26,7 @@ const App = () => {
       </header>
 
       <LACountySelector defaultCounty={county} onChange={setCounty} />
-
+      
       <div className="nothin">
         <div className="container5">
           <CovidChart covidType="confirmed_cases" county={county} />
@@ -32,7 +35,15 @@ const App = () => {
           <CovidChart covidType="deaths" county={county} />
         </div>
       </div>
-
+      
+      <div className="container5">
+      <PlaceSelector county={county} defaultPlace={place} onChange={setPlace} />
+      </div>
+    
+      <div>
+      <CovidChartPlace covidType="confirmed_cases" county={county} place={place}/>
+     </div>
+      
       <div>
         <Footer />
       </div>
