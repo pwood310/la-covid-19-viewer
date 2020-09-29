@@ -175,7 +175,7 @@ function createChartOptions(state: IState, props: Props): any {
       //  margin: [0,0,85,85]
     },
     title: {
-      text: snakeToPascal(props.covidType),
+      text: props.place + " - " + snakeToPascal(props.covidType),
     },
     xAxis: {
       type: "datetime",
@@ -332,12 +332,12 @@ function CovidChartPlace(props: Props): any {
   }
 
   if (!rawData || !rawData.length) {
+    let style = {textAlign: "center"};
+   
     return (
-      <div>
-        <span>No place data</span>
-        <br></br>
-      </div>
-    );
+      <p style={{textAlign: "center"}}> 
+      <h3>No 'Place' breakdown for {props.county} county</h3>
+      </p>);
   }
 
   function setHoverData(e) {

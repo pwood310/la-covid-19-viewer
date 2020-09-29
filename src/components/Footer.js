@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="App-footer">
       <p>
-        Copyright ⓒ {year} Peter Wood - Many Lakes Software, Contact:
+        Copyright ⓒ {year} Peter Wood - Many Lakes Software, (Work in Progress) Contact:
         <a href="mailto:info@manylakes.io">info@manylakes.io</a>, Data
         from the&nbsp;
         <a

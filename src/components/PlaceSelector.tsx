@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useQuery } from "react-query";
 import { LATimesRetriever, PlaceTotalsType } from "../lib/LATimesRetriever";
 
@@ -19,12 +19,16 @@ import Select from "@material-ui/core/Select";
 //   },
 // }));
 
-type IProp = { county: string, defaultPlace?: string; onChange: (place: string) => void };
+type IProp = {
+  county: string;
+  defaultPlace?: string;
+  onChange: (place: string) => void;
+};
 
 function PlaceSelector(props: IProp) {
   // seems not helping problem that only appears in dev mode  const inputEl = React.useRef(null);
   //const classes = useStyles();
-  const [place, setPlace] = useState(props.defaultPlace ?? "None");
+  const [place, setPlace] = useState(props.defaultPlace ?? "");
 
   function retrieve(): () => Promise<any[]> {
     const retriever = new LATimesRetriever();
@@ -42,6 +46,39 @@ function PlaceSelector(props: IProp) {
     }
   );
 
+  const { defaultPlace, county, onChange } = props;
+
+  const justNames: string[] = useMemo(() => {
+    if (!data) return [];
+
+    return data
+      .filter((item) => item.county === county)
+      .map((item) => item.place)
+      .reduce(
+        (unique, item) => (unique.includes(item) ? unique : [...unique, item]),
+        []
+      )
+      .sort();
+  }, [data, county]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    let plc = place;
+    if (!justNames.length) {
+      if (plc !== "") plc = "";
+    } else {
+      if (!justNames.includes(plc)) {
+        if (justNames.includes(defaultPlace)) plc = defaultPlace;
+        else plc = justNames[0];
+      }
+    }
+    if (plc !== place) {
+      setPlace(plc);
+      if (onChange) onChange(plc);
+    }
+  }, [justNames, place, onChange, defaultPlace, isLoading]);
+
   if (isError || error) {
     return <span>Error: {error.message}</span>;
   }
@@ -49,20 +86,6 @@ function PlaceSelector(props: IProp) {
   if (isLoading) {
     return <span>Loading...</span>;
   }
-
-  let justNames: string[] = data
-    .filter( (item) => item.county === props.county)
-    .map((item) => item.place)
-    .reduce(
-      (unique, item) => (unique.includes(item) ? unique : [...unique, item]),
-      []
-    )
-    .sort();
-
-  const defaultProps = {
-    options: justNames,
-    getOptionLabel: (option) => option,
-  };
 
   const handleChange = (event) => {
     event.preventDefault();

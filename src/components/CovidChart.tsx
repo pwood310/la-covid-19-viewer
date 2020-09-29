@@ -179,7 +179,7 @@ function createChartOptions(state: IState, props: Props): any {
       //  margin: [0,0,85,85]
     },
     title: {
-      text: snakeToPascal(props.covidType),
+      text: props.county + " - " + snakeToPascal(props.covidType),
     },
     xAxis: {
       type: "datetime",

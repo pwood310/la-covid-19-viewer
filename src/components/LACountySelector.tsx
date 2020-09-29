@@ -58,11 +58,11 @@ function LACountySelector(props: IProp) {
     )
     .sort();
 
-  const defaultProps = {
-    options: justNames,
-    getOptionLabel: (option) => option,
-  };
-
+//   const defaultProps = {
+//     options: justNames,
+//     getOptionLabel: (option) => option,
+//   };
+ 
   const handleChange = (event) => {
     event.preventDefault();
     const cty = event.target.value;
