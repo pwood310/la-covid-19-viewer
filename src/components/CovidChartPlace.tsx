@@ -331,6 +331,15 @@ function CovidChartPlace(props: Props): any {
     return <span>Loading...</span>;
   }
 
+  if (!rawData || !rawData.length) {
+    return (
+      <div>
+        <span>No place data</span>
+        <br></br>
+      </div>
+    );
+  }
+
   function setHoverData(e) {
     // The chart is not updated because `chartOptions` has not changed.
     //this.setState({ hoverData: e.target.category });
@@ -352,7 +361,9 @@ function CovidChartPlace(props: Props): any {
     setState(newState);
   }
 
-  console.log(`Covid Chart Place redrawing for ${props.covidType}, ${props.county}, ${props.place}`);
+  console.log(
+    `Covid Chart Place redrawing for ${props.covidType}, ${props.county}, ${props.place}`
+  );
 
   return (
     <div className="OUTOUTOUTcontaikner5">
