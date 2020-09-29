@@ -285,6 +285,8 @@ function CovidChartPlace(props: Props): any {
     hoverData: null,
   });
 
+  const { county, place, covidType } = props;
+
   function filterByCountyAndSortByDate(
     allCountyTotals: any[],
     county: string,
@@ -293,8 +295,19 @@ function CovidChartPlace(props: Props): any {
     if (!allCountyTotals) return null;
 
     return allCountyTotals
-      .filter((item) => item.county === county && item.place === place)
-      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      .filter((item: PlaceTotalsType) => item.county === county && item.place === place)
+      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+      .map(function (value:PlaceTotalsType, index, arr)  { 
+        if (!index) {
+          this.max_cc = value.confirmed_cases;
+          return value;
+        }
+        if (value.confirmed_cases < this.max_cc) {
+          return {...value, confirmed_cases:this.max_cc}
+        }
+        this.max_cc = value.confirmed_cases;
+        return value;
+      }, { max_cc: 0})
   }
 
   function retrieve(): () => Promise<PlaceTotalsType[]> {
@@ -314,8 +327,8 @@ function CovidChartPlace(props: Props): any {
   );
 
   const rawData = useMemo(
-    () => filterByCountyAndSortByDate(data, props.county, props.place),
-    [data, props.county, props.place]
+    () => filterByCountyAndSortByDate(data, county, place),
+    [data, county, place]
   );
 
   const memoizedChartOptions = useMemo(
