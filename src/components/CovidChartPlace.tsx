@@ -7,6 +7,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { useQuery } from "react-query";
 
+import "./CovidChartPlace.css";
+
 import { LATimesRetriever, PlaceTotalsType } from "../lib/LATimesRetriever";
 
 Highcharts.setOptions({
@@ -166,13 +168,15 @@ function createChartOptions(state: IState, props: Props): any {
       type: "spline",
       renderTo: "container",
       // animation: false,
-      spacingTop: 0,
-      spacingRight: 0,
-      spacingBottom: 0,
-      spacingLeft: 0,
+      spacingTop: 5,
+      spacingRight: 5,
+      spacingBottom: 5,
+      spacingLeft: 5,
       zoomType: "x",
+      // borderColor: '#030ffc',
+      //   borderWidth: 4
       // plotBorderWidth: 0,
-      //  margin: [0,0,85,85]
+        //margin: [0,0,85,85]
     },
     title: {
       text: props.place + " - " + snakeToPascal(props.covidType),
@@ -349,7 +353,7 @@ function CovidChartPlace(props: Props): any {
    
     return (
       <p style={{textAlign: "center"}}> 
-      <h3>No 'Place' breakdown for {props.county} county</h3>
+      <h3>No 'Place' breakdown for {county} county</h3>
       </p>);
   }
 
@@ -375,11 +379,11 @@ function CovidChartPlace(props: Props): any {
   }
 
   console.log(
-    `Covid Chart Place redrawing for ${props.covidType}, ${props.county}, ${props.place}`
+    `Covid Chart Place redrawing for ${covidType}, ${county}, ${place}`
   );
 
   return (
-    <div className="OUTOUTOUTcontaikner5">
+    <div className="CovidChartPlace">
       <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions} />
       {/* <h3>Hovering over {hoverData}</h3> */}
       <Button

@@ -7,6 +7,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { useQuery } from "react-query";
 
+import "./CovidChart.css";
+
 import { LATimesRetriever, CountyTotalsType } from "../lib/LATimesRetriever";
 
 Highcharts.setOptions({
@@ -170,10 +172,10 @@ function createChartOptions(state: IState, props: Props): any {
       type: "spline",
       renderTo: "container",
       // animation: false,
-      spacingTop: 0,
-      spacingRight: 0,
-      spacingBottom: 0,
-      spacingLeft: 0,
+      spacingTop: 5,
+      spacingRight: 5,
+      spacingBottom: 5,
+      spacingLeft: 5,
       zoomType: "x",
       // plotBorderWidth: 0,
       //  margin: [0,0,85,85]
@@ -362,7 +364,7 @@ function CovidChart(props: Props): any {
   console.log(`Covid Chart redrawing for ${props.covidType}, ${props.county}`);
 
   return (
-    <div className="OUTOUTOUTcontaikner5">
+    <div className="CovidChart">
       <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions} />
       {/* <h3>Hovering over {hoverData}</h3> */}
       <Button

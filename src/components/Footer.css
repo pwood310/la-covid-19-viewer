@@ -1,0 +1,34 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+/* html {
+  font-family: "Montserrat", sans-serif;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+} */
+
+
+
+.Footer p {
+  /* position: absolute; */
+
+  color: brown;
+  /* font-family: "McLaren", cursive; */
+  font-weight: 200;
+  font-size: calc(4px + 2vmin);
+  background-color: #f5ba13;
+  /* background: #eee; */
+  padding: 0 16px;
+
+ 
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  height: 2 .0rem;
+}
+
+/* footer p {
+  color: #ccc;
+} */
+

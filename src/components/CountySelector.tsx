@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
+import "./CountySelector.css";
 // const useStyles = makeStyles((theme) => ({
 //   formControl: {
 //     margin: theme.spacing(1),
@@ -21,7 +22,7 @@ import Select from "@material-ui/core/Select";
 
 type IProp = { defaultCounty?: string; onChange: (county: string) => void };
 
-function LACountySelector(props: IProp) {
+function CountySelector(props: IProp) {
   // seems not helping problem that only appears in dev mode  const inputEl = React.useRef(null);
   //const classes = useStyles();
   const [county, setCounty] = useState(props.defaultCounty ?? "Los Angeles");
@@ -58,11 +59,11 @@ function LACountySelector(props: IProp) {
     )
     .sort();
 
-//   const defaultProps = {
-//     options: justNames,
-//     getOptionLabel: (option) => option,
-//   };
- 
+  //   const defaultProps = {
+  //     options: justNames,
+  //     getOptionLabel: (option) => option,
+  //   };
+
   const handleChange = (event) => {
     event.preventDefault();
     const cty = event.target.value;
@@ -71,8 +72,8 @@ function LACountySelector(props: IProp) {
   };
 
   return (
-    <FormControl>
-      <InputLabel id="demo-simple-select-label">County</InputLabel>
+    <FormControl variant="filled" className="CountySelector">
+      <InputLabel id="cali-county-select-lbl">County Chooser</InputLabel>
       <Select
         labelId="cali-county-select-label"
         id="cali-county-select"
@@ -89,4 +90,4 @@ function LACountySelector(props: IProp) {
   );
 }
 
-export default LACountySelector;
+export default CountySelector;

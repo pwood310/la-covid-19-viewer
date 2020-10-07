@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
+import "./PlaceSelector.css";
 // const useStyles = makeStyles((theme) => ({
 //   formControl: {
 //     margin: theme.spacing(1),
@@ -95,8 +96,8 @@ function PlaceSelector(props: IProp) {
   };
 
   return (
-    <FormControl>
-      <InputLabel id="demo-simple-select-label">Place</InputLabel>
+    <FormControl variant="filled" className="PlaceSelector">
+      <InputLabel id="demo-simple-select-label">City or Neighborhood</InputLabel>
       <Select
         labelId="cali-place-select-label"
         id="cali-place-select"
