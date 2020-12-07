@@ -26,7 +26,7 @@ function calculateDoublingDays(arr: number[], index: number) {
 }
 
 function createDifferentialRunningAverages(
-  arrayOfObj: object[],
+  arrayOfObj: any[],
   columnName: string
 ) {
   let arrAvg = (arr: number[]): number => {
