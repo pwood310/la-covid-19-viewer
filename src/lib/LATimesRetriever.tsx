@@ -4,7 +4,13 @@ import { CSVToObjectTransformer } from "./CSVToObjectTransformer";
 const URIBase =
   "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
 
-export type PlaceTotalsType = {
+export type BaseTotalsType = {
+  date: string; //	The date when the data were retrieved in ISO 8601 format.
+  county: string; //The name of the county where the city is located.
+  fips: string; //	The FIPS code given to the county by the federal government. Can be used to merge with other data sources.
+};
+
+export interface PlaceTotalsType extends BaseTotalsType {
   date: string; //	The date when the data were retrieved in ISO 8601 format.
   county: string; //The name of the county where the city is located.
   fips: string; //	The FIPS code given to the county by the federal government. Can be used to merge with other data sources.
@@ -15,7 +21,7 @@ export type PlaceTotalsType = {
   y: number; //	float
 };
 
-export type CountyTotalsType = {
+export interface CountyTotalsType extends BaseTotalsType {
   county: string; //	The name of the county where the agency is based.
   fips: string; //	The FIPS code given to the county by the federal government. Can be used to merge with other data sources.
   date: string; //The date when the data were retrieved in ISO 8601 format.

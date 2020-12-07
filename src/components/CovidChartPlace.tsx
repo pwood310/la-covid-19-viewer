@@ -9,7 +9,8 @@ import { useQuery } from "react-query";
 
 import "./CovidChartPlace.css";
 
-import { LATimesRetriever, PlaceTotalsType } from "../lib/LATimesRetriever";
+import { LATimesRetriever, BaseTotalsType } from "../lib/LATimesRetriever";
+import { fullyPopulateChartInfo, filterAndSortByDate } from "../lib/LATimesChartUtils";
 
 Highcharts.setOptions({
   lang: {
@@ -25,22 +26,6 @@ const useStyles = (theme) => ({
   },
 });
 
-function snakeToPascal(s: string) {
-  if (!s || typeof s != "string") return s;
-
-  s = capitalizeFirstLetter(s);
-
-  let idx = s.indexOf("_");
-  while (idx !== -1) {
-    s = s.slice(0, idx) + capitalizeFirstLetter(s.slice(idx + 1));
-    idx = s.indexOf("_");
-  }
-  return s;
-}
-
-function capitalizeFirstLetter(s: string) {
-  return s.slice(0, 1).toUpperCase() + s.slice(1);
-}
 
 type Props = {
   county: string;
@@ -53,236 +38,6 @@ interface IState {
   hoverData: any;
 }
 
-function extractDifferenceArray(rawDataArray, labelName) {
-  return rawDataArray.map((item, index, arr) => {
-    return index === 0
-      ? item[labelName]
-      : item[labelName] - arr[index - 1][labelName];
-  });
-}
-
-function calculateDoublingDays(arr: number[], index: number) {
-  const prev = index !== 0 ? arr[index - 1] : 0;
-  const curr = arr[index];
-
-  const ratio = curr / prev;
-  // ratio = log(2)/log(ratio)
-  return Math.LN2 / Math.log(ratio);
-}
-
-function createDifferentialRunningAverages(
-  arrayOfObj: any[],
-  labelName: string
-) {
-  let arrAvg = (arr) => {
-    if (!arr.length) return 0;
-
-    let sum = 0;
-    for (let i = 0; i < arr.length; i++) {
-      sum += arr[i];
-    }
-    return sum / arr.length;
-  };
-
-  let differenceArray = extractDifferenceArray(arrayOfObj, labelName);
-  let cumulativeArray = [];
-  for (let total = 0, i = 0; i < differenceArray.length; i++) {
-    total += differenceArray[i];
-    cumulativeArray.push(total);
-  }
-
-  let daysInAverage = 7;
-  let averagesArray = differenceArray.map((_item, index, arr) => {
-    return arrAvg(arr.slice(Math.max(0, index + 1 - daysInAverage), index + 1));
-  });
-
-  let avgValues = [];
-  let dailyValues = [];
-  let cumulativeValues = [];
-
-  for (let i = 0; i < averagesArray.length; i++) {
-    let date = new Date(arrayOfObj[i].date).valueOf();
-
-    let doublingDays = calculateDoublingDays(averagesArray, i);
-
-    let dailyItem = { x: date, y: differenceArray[i] };
-    let avgItem = { x: date, y: averagesArray[i], z: doublingDays };
-    let cumulativeItem = { x: date, y: cumulativeArray[i] };
-
-    dailyValues.push(dailyItem);
-    avgValues.push(avgItem);
-    cumulativeValues.push(cumulativeItem);
-  }
-  return { dailyValues, avgValues, cumulativeValues };
-}
-
-function setSeriesData(rawData: any[], props: Props, chartOptions: any) {
-  chartOptions.series = null;
-  //console.log(chartOptions);
-
-  let {
-    dailyValues,
-    avgValues,
-    cumulativeValues,
-  } = createDifferentialRunningAverages(rawData, props.covidType);
-
-  chartOptions.series = [
-    {
-      yAxis: 0,
-      name: "Daily",
-      data: dailyValues,
-      type: "column",
-    },
-  ];
-
-  chartOptions.series.push({
-    yAxis: 1,
-    name: "Cumulative",
-    data: cumulativeValues,
-    type: "spline",
-  });
-
-  chartOptions.series.push({
-    yAxis: 0,
-    name: "7-Day Moving Average",
-    data: avgValues,
-    type: "spline",
-  });
-}
-
-function fullyPopulateChartInfo(
-  rawData: any[],
-  state: IState,
-  props: Props
-): any {
-  if (!rawData || !rawData.length) return {};
-
-  const chartOptions = createChartOptions(state, props);
-  setSeriesData(rawData, props, chartOptions);
-  return chartOptions;
-}
-
-function createChartOptions(state: IState, props: Props): any {
-  return {
-    chart: {
-      type: "spline",
-      renderTo: "container",
-      // animation: false,
-      spacingTop: 5,
-      spacingRight: 5,
-      spacingBottom: 5,
-      spacingLeft: 5,
-      zoomType: "x",
-      // borderColor: '#030ffc',
-      //   borderWidth: 4
-      // plotBorderWidth: 0,
-        //margin: [0,0,85,85]
-    },
-    title: {
-      text: props.place + " - " + snakeToPascal(props.covidType),
-    },
-    xAxis: {
-      type: "datetime",
-    },
-    tooltip: {
-      //pointFormat: "{series.name}: <b>{point.y:,.0f}</b><br/>",
-      formattRSAVE: function () {
-        return this.points.reduce(function (s, point) {
-          return s + "<br/>" + point.series.name + ": " + point.y + "m";
-        }, "<b>" + this.x + "</b>");
-      },
-      formatter: function () {
-        return this.points.reduce((s, point) => {
-          s += `<br/>${point.series.name}: <b>${point.y.toFixed(0)}</b>`;
-
-          if (point.point.z === undefined) return s;
-
-          let dRate = point.point.z;
-          dRate = !isNaN(dRate) ? dRate.toFixed(0) : "-";
-          s += `<br/>Days to Double at Avg Rate: <b> ${dRate}</br>`;
-
-          return s;
-        }, "<small><em>" + new Date(this.x).toDateString() + "</em></small>");
-      },
-      shared: true,
-    },
-    lang: {
-      decimalPoint: ".",
-      thousandsSep: ",",
-    },
-
-    yAxis: [
-      {
-        // Primary yAxis
-        type: "linear",
-        labels: {
-          format: "{value}",
-          style: {
-            // color: Highcharts.getOptions().colors[1]
-          },
-        },
-        title: {
-          text: "Daily",
-          style: {
-            //   color: Highcharts.getOptions().colors[2]
-            // fontSize: "8px"
-          },
-        },
-
-        //minorTickInterval: 0.1,
-        // accessibility: {
-        //   rangeDescription: 'Range: 0.1 to 1000'
-        // }
-        opposite: false,
-      },
-      {
-        // Secondary yAxis
-        type: state.cumulativeScale,
-        labels: {
-          format: "{value}",
-          style: {
-            //   color: Highcharts.getOptions().colors[0]
-          },
-        },
-        title: {
-          text: "Cumulative",
-          style: {
-            //  color: Highcharts.getOptions().colors[0]
-            //     fontSize: "8px"
-          },
-        },
-        opposite: true,
-      },
-      {
-        // Secondary yAxis
-        type: "linear",
-        labels: {
-          format: "{value}",
-          style: {
-            //   color: Highcharts.getOptions().colors[0]
-          },
-        },
-        title: {
-          text: "7-Day Moving Average",
-          style: {
-            //  color: Highcharts.getOptions().colors[0]
-          },
-        },
-        opposite: false,
-      },
-    ],
-    plotOptions: {
-      series: {
-        point: {
-          events: {
-            mouseOver: null, //setHoverData.bind(this),
-          },
-        },
-      },
-    },
-  };
-}
-
 function CovidChartPlace(props: Props): any {
   const [state, setState] = useState<IState>({
     cumulativeScale: "linear",
@@ -291,37 +46,14 @@ function CovidChartPlace(props: Props): any {
 
   const { county, place, covidType } = props;
 
-  function filterByCountyAndSortByDate(
-    allCountyTotals: any[],
-    county: string,
-    place: string
-  ): any[] {
-    if (!allCountyTotals) return null;
-
-    return allCountyTotals
-      .filter((item: PlaceTotalsType) => item.county === county && item.place === place)
-      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
-      .map(function (value:PlaceTotalsType, index, arr)  { 
-        if (!index) {
-          this.max_cc = value.confirmed_cases;
-          return value;
-        }
-        if (value.confirmed_cases < this.max_cc) {
-          return {...value, confirmed_cases:this.max_cc}
-        }
-        this.max_cc = value.confirmed_cases;
-        return value;
-      }, { max_cc: 0})
-  }
-
-  function retrieve(): () => Promise<PlaceTotalsType[]> {
+  function retrieve(): () => Promise<BaseTotalsType[]> {
     const retriever = new LATimesRetriever();
     return async () => {
       return await retriever.retrievePlaceTotals();
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<PlaceTotalsType[], any>(
+  const { isLoading, isError, data, error } = useQuery<BaseTotalsType[], any>(
     "placeTotals",
     retrieve(),
     {
@@ -331,13 +63,13 @@ function CovidChartPlace(props: Props): any {
   );
 
   const rawData = useMemo(
-    () => filterByCountyAndSortByDate(data, county, place),
-    [data, county, place]
+    () => filterAndSortByDate(data, county, place, covidType, true),
+    [data, county, place, covidType]
   );
 
   const memoizedChartOptions = useMemo(
-    () => fullyPopulateChartInfo(rawData, state, props),
-    [rawData, state, props]
+    () => fullyPopulateChartInfo(rawData, county, place, covidType, state.cumulativeScale),
+    [rawData, county, place, covidType, state.cumulativeScale]
   );
 
   if (isError || error) {
@@ -370,6 +102,7 @@ function CovidChartPlace(props: Props): any {
   }
 
   function toggleCumulativeScale() {
+
     let newScalingType = getToggledScaleName(state.cumulativeScale);
 
     let newState = { ...state, cumulativeScale: newScalingType };

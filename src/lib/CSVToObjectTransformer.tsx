@@ -29,12 +29,10 @@ export class CSVToObjectTransformer {
         switch (type) {
             case 'date':
                 return new Date(value);
-                break;
 
             case 'string':
                 return value;
-                break;
-
+ 
             case 'number':
                 if (value === '')
                     return null;
@@ -45,8 +43,7 @@ export class CSVToObjectTransformer {
                     console.error(`While parsing column:'${context.column}', value:'${value}, caught:${e} `)
                     return "null";
                 }
-                break;
-
+  
             default:
                 throw new Error(`Can't hydrate type ${type} for column ${context.column}`)
         }
