@@ -132,13 +132,12 @@ export function filterAndSortByDate(
   cumulativeColumnName: string,
   levelData: boolean
 ): BaseTotalsType[] {
-  console.log("AllCOunty!", allCountyTotals);
 
   if (!allCountyTotals) return null;
 
   let tots = filterByCountyAndPlace(allCountyTotals, county, place);
 
-  console.log("Tots!", tots);
+  //console.log("Tots!", tots);
 
   tots = tots.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 

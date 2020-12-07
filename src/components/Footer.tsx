@@ -3,7 +3,6 @@ import "./Footer.css";
 
 function Footer() {
   const year = new Date().getFullYear();
-  console.log("year is ", year)
   return (
     <footer className="Footer">
       <p>

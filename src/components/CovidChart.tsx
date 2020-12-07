@@ -65,7 +65,7 @@ function CovidChart(props: Props): any {
     [data, county, covidType]
   );
 
-  console.log("RawData", rawData);
+  //console.log("RawData", rawData);
 
 
   const memoizedChartOptions = useMemo(
@@ -73,7 +73,7 @@ function CovidChart(props: Props): any {
     [rawData, county, covidType, state.cumulativeScale]
   );
 
-  console.log("Memoized", memoizedChartOptions);
+  //console.log("Memoizedchartoptions", memoizedChartOptions);
 
   if (isError || error) {
     return <span>Error: {error.message}</span>;
@@ -105,9 +105,7 @@ function CovidChart(props: Props): any {
     setState(newState);
   }
 
-  console.log(
-    `Covid Chart County redrawing for ${covidType}, ${county}`
-  );
+  console.log(`CovidChart redrawing for ${covidType}, ${county}`);
 
   return (
     <div className="CovidChart">
