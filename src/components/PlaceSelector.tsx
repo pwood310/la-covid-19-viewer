@@ -29,7 +29,10 @@ type IProp = {
 function PlaceSelector(props: IProp) {
   // seems not helping problem that only appears in dev mode  const inputEl = React.useRef(null);
   //const classes = useStyles();
-  const [place, setPlace] = useState(props.defaultPlace ?? "");
+  // const [place, setPlace] = useState(props.defaultPlace ?? "");
+  const [place, setPlace] = useState("");
+
+  console.log(`placeSelector: county=${props.county}, place=${place} `);
 
   function retrieve(): () => Promise<any[]> {
     const retriever = new LATimesRetriever();
@@ -42,7 +45,7 @@ function PlaceSelector(props: IProp) {
     "placeTotals",
     retrieve(),
     {
-      staleTime: 5 * 60 * 1000,
+      staleTime: 2 * 3600 * 1000,
       retry: 2,
     }
   );
@@ -63,22 +66,35 @@ function PlaceSelector(props: IProp) {
   }, [data, county]);
 
   useEffect(() => {
-    if (isLoading) return;
-
+    console.log(`useEffect in, ${place}`)
+    if (isLoading) 
+      {
+        console.log('useEffect: still loading so returning')
+        return;
+      }
     let plc = place;
     if (!justNames.length) {
       if (plc !== "") plc = "";
     } else {
-      if (!justNames.includes(plc)) {
-        if (justNames.includes(defaultPlace)) plc = defaultPlace;
-        else plc = justNames[0];
-      }
+      if (!justNames.includes(plc)) plc = justNames[0];
     }
+
     if (plc !== place) {
-      setPlace(plc);
+      console.log(`changing ${place} to ${plc}`);
+      setPlace(plc);    
       if (onChange) onChange(plc);
+      console.log(`useEffect out, ${place}`)
     }
+
   }, [justNames, place, onChange, defaultPlace, isLoading]);
+
+  
+  const handleChange = (event) => {
+    event.preventDefault();
+    const plc = event.target.value;
+    setPlace(plc);
+    if (onChange) onChange(plc);
+  };
 
   if (isError || error) {
     return <span>Error: {error.message}</span>;
@@ -88,16 +104,17 @@ function PlaceSelector(props: IProp) {
     return <span>Loading...</span>;
   }
 
-  const handleChange = (event) => {
-    event.preventDefault();
-    const plc = event.target.value;
-    setPlace(plc);
-    if (props.onChange) props.onChange(plc);
-  };
+  if (!justNames.includes(place) && place !== "") {
+    console.log(`place not right yet - bouncing: ${place}`)
+    return <span>Bouncing...</span>;
+  }
 
+  console.log('normal render')
   return (
     <FormControl variant="filled" className="PlaceSelector">
-      <InputLabel id="demo-simple-select-label">City or Neighborhood</InputLabel>
+      <InputLabel id="demo-simple-select-label">
+        City or Neighborhood
+      </InputLabel>
       <Select
         labelId="cali-place-select-label"
         id="cali-place-select"
