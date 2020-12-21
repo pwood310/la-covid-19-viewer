@@ -1,10 +1,11 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import CovidChart from "../components/CovidChart";
-import { CaliCountyTotalsCache } from "../lib/CaliCountyTotalsCache";
-import { IDataCache } from "../lib/IDataCache";
+// import { CaliCountyTotalsCache } from "../lib/CaliCountyTotalsCache";
+// import { IDataCache } from "../lib/IDataCache";
 
-class CountyTotalsMockery implements IDataCache {
+class CountyTotalsMockery {
+  //implements IDataCache {
   delay: number;
 
   constructor(delay: number) {
@@ -25,31 +26,32 @@ class CountyTotalsMockery implements IDataCache {
         },
       ]);
     } else {
-        return new Promise( (resolve) => {
-          setTimeout( () => {
-            resolve([
-              {
-                date: new Date("2020-09-18"),
-                county: "Los Angeles",
-                fips: "037",
-                confirmed_cases: 258587,
-                deaths: 6330,
-                new_confirmed_cases: 1244,
-                new_deaths: 6,
-              },
-            ]);
-          },this.delay* 1000) 
-        })
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([
+            {
+              date: new Date("2020-09-18"),
+              county: "Los Angeles",
+              fips: "037",
+              confirmed_cases: 258587,
+              deaths: 6330,
+              new_confirmed_cases: 1244,
+              new_deaths: 6,
+            },
+          ]);
+        }, this.delay * 1000);
+      });
     }
   }
 }
 
 test("renders covid chart", () => {
-  const mock = new CountyTotalsMockery(0);
+  //const mock = new CountyTotalsMockery(0);
 
-  const { getByText } = render(
-    <CovidChart covidType="deaths" dataSource={mock} />
-  );
+  debugger;
+  const chart = render(<CovidChart covidType="deaths" county="Los Angeles" />);
+
+  const { getByText } = chart;
   const linkElement = getByText(/highcharts/i);
   expect(linkElement).toBeInTheDocument();
 });
