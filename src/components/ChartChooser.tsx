@@ -5,11 +5,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
-function ChartChooser(props) {
+function ChartChooser(props:any) {
   console.log("chartchooser redrawing");
   const [value, setValue] = React.useState("confirmed_cases");
 
-  const handleChange = (event) => {
+  const handleChange = (event:any) => {
     setValue(event.target.value);
     props.onChoice(value);
   };

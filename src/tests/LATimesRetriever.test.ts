@@ -2,26 +2,31 @@ import React from 'react';
 //import { render } from '@testing-library/react';
 import { LATimesRetriever, CountyTotalsType, PlaceTotalsType } from '../lib/LATimesRetriever';
 
+
 describe("LATimesRetriever Tests", () => {
-  test('retrieves CountyTotals', async (done) => {
+  test('retrieves CountyTotals', async () => {
     const retriever = new LATimesRetriever();
     let result: CountyTotalsType[] = await retriever.retrieveCountyTotals();
     expect(result).toBeTruthy();
     expect(result.length).toBeGreaterThanOrEqual(11100);
 
-    done();
   });
 
-  test('retrieves PlaceTotals', async (done) => {
+  test('retrieves PlaceTotals', async () => {
     const retriever = new LATimesRetriever();
     let result: PlaceTotalsType[] = await retriever.retrievePlaceTotals();
     expect(result).toBeTruthy();
     expect(result.length).toBeGreaterThanOrEqual(142000);
 
-    done();
   });
 
-  test('returns error when axios fails to retrieve', async (done) => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+  
+  test('returns error when axios fails to retrieve', async () => {
+
+    
     const retriever = new LATimesRetriever();
 
     try {
@@ -30,7 +35,6 @@ describe("LATimesRetriever Tests", () => {
     catch (e) {
       expect(e.toString()).toMatch(/status code 404/i);
     }
-    done();
   });
 });
 

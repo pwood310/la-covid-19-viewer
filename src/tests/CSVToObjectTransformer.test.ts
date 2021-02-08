@@ -4,7 +4,7 @@ import { CSVToObjectTransformer } from '../lib/CSVToObjectTransformer';
 
 describe("Retriever parsing", () => {
 
-  test('transforms csv to array of objects', async (done) => {
+  test('transforms csv to array of objects', async () => {
     const transformer = new CSVToObjectTransformer();
     const input = `date,county,fips,confirmed_cases,deaths,new_confirmed_cases,new_deaths
 2020-09-18,Alameda,001,20364,370,202,5
@@ -19,7 +19,8 @@ describe("Retriever parsing", () => {
     expect(la['county']).toBe("Los Angeles");
     expect(la).toStrictEqual(
       {
-        "date": new Date("2020-09-18"),
+        //"date": new Date("2020-09-18"),
+        "date": "2020-09-18",
         "county": "Los Angeles",
         "fips": "037",
         "confirmed_cases": 258587,
@@ -32,7 +33,8 @@ describe("Retriever parsing", () => {
     expect(yolo['county']).toBe("Yolo");
     expect(yolo).toStrictEqual(
       {
-        "date": new Date("2020-01-26"),
+        //"date": new Date("2020-01-26"),
+        "date": "2020-01-26",
         "county": "Yolo",
         "fips": "113",
         "confirmed_cases": 0,
@@ -43,10 +45,9 @@ describe("Retriever parsing", () => {
     );
 
     //    console.log(JSON.stringify(result))
-    done()
   });
 
-  test('optional column->type map is obeyed', async (done) => {
+  test('optional column->type map is obeyed', async () => {
     const transformer = new CSVToObjectTransformer([['county', 'string'], ['date', 'date'], ['new_deaths', 'string']]);
     const input = `date,county,fips,confirmed_cases,deaths,new_confirmed_cases,new_deaths
 2020-09-18,Alameda,001,20364,370,202,5
@@ -72,7 +73,6 @@ describe("Retriever parsing", () => {
     );
 
     //    console.log(JSON.stringify(result))
-    done()
   });
 
 

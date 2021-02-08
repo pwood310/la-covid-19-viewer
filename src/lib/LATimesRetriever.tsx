@@ -1,6 +1,7 @@
 import axios from "axios";
 import { CSVToObjectTransformer } from "./CSVToObjectTransformer";
 
+
 const URIBase =
   "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
 
@@ -33,7 +34,6 @@ export interface CountyTotalsType extends BaseTotalsType {
 
 export class LATimesRetriever {
   uriBase: string | undefined;
-  endpoint: string;
   csvTransformer: CSVToObjectTransformer;
 
   constructor(uriBase?: string) {
@@ -55,11 +55,12 @@ export class LATimesRetriever {
      return transformed;
   }
   
-  async retrieve(filename): Promise<string> {
+  async retrieve(filename:string): Promise<string> {
     const uri = `${this.uriBase}/${filename}`;
     try {
-      console.log(`retrieve() calling axios for filename=${filename}`);
-      const result = await axios(uri);
+      console.log(`retrieve() calling axios with uri=${uri}`);
+      const result = await axios.get(uri);
+      // console.debug("result", result)
       if (!result || result.status !== 200) {
         let err = result ? result.status : result;
         console.error(
@@ -72,25 +73,5 @@ export class LATimesRetriever {
       throw e;
     }
   }
-
   
-  async oldRetrieve(filename): Promise<any[]> {
-    const uri = `${this.uriBase}/${this.endpoint}`;
-    try {
-      console.log("calling axios!");
-      const result = await axios(uri);
-      if (!result || result.status !== 200) {
-        console.error(
-          "bad status from axios retrieve: ",
-          result ? result.status : result
-        );
-        throw new Error(`LATimesRetriever: axios failed to retrieve ${uri}`);
-      }
-      const transformed = await this.csvTransformer.transform(result.data);
-      return transformed;
-    } catch (e) {
-      console.error(`retrieve: caught exception: ${e}`);
-      throw e;
-    }
-  }
 };

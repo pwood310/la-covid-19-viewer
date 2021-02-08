@@ -9,16 +9,20 @@ import { useQuery } from "react-query";
 
 import "./CovidChart.css";
 
-import { LATimesRetriever, BaseTotalsType, CountyTotalsType } from "../lib/LATimesRetriever";
-import { fullyPopulateChartInfo, filterAndSortByDate } from "../lib/LATimesChartUtils";
+import {
+  LATimesRetriever,
+  CountyTotalsType,
+} from "../lib/LATimesRetriever";
+//import { fullyPopulateChartInfo, filterAndSortByDate } from "../lib/LATimesChartUtils";
+import {
+  ChartDailyRowInput,
+  ChartDailyRow,
+  extractWorkingData,
+  fullyPopulateChartInfo,
+  snakeToPascal,
+} from "../lib/LATimesChartUtils";
 
-Highcharts.setOptions({
-  lang: {
-    thousandsSep: ",",
-  },
-});
-
-const useStyles = (theme) => ({
+const useStyles = (theme: any) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
@@ -32,13 +36,15 @@ type Props = {
 };
 
 interface IState {
-  cumulativeScale: any;
+  cumulativeScale: string;
+  dailyScale: string;
   hoverData: any;
 }
 
 function CovidChart(props: Props): any {
   const [state, setState] = useState<IState>({
     cumulativeScale: "linear",
+    dailyScale: "linear",
     hoverData: null,
   });
 
@@ -55,22 +61,48 @@ function CovidChart(props: Props): any {
     "countyTotals",
     retrieve(),
     {
-      staleTime: 5 * 60 * 1000,
+      staleTime: 2 * 3600 * 1000,
       retry: 2,
     }
   );
 
-  const rawData = useMemo(
-    () => filterAndSortByDate(data, county, '', covidType, true),
-    [data, county, covidType]
-  );
+  const filteredData: ChartDailyRowInput[] = useMemo(() => {
+    if (!data || !data.length) return [];
+    return data
+      .filter((item) => item.county === county)
+      .map((row: CountyTotalsType) => {
+        return {
+          date: row.date,
+          rawCumulative:
+            covidType === "deaths" ? row.deaths : row.confirmed_cases,
+          rawDaily:
+            covidType === "deaths" ? row.new_deaths : row.new_confirmed_cases,
+        };
+      });
+  }, [data, county, covidType]);
 
   //console.log("RawData", rawData);
 
+  const dataReadyForCharting:ChartDailyRow[] = useMemo(
+    () => extractWorkingData(filteredData, true, false, 7),
+    [filteredData]
+  );
 
   const memoizedChartOptions = useMemo(
-    () => fullyPopulateChartInfo(rawData, county, '', covidType, state.cumulativeScale),
-    [rawData, county, covidType, state.cumulativeScale]
+    () =>
+      fullyPopulateChartInfo(
+        dataReadyForCharting,
+        county + " - " + snakeToPascal(covidType),
+        state.cumulativeScale,
+        state.dailyScale
+      ),
+    [
+      dataReadyForCharting,
+      county,
+      covidType,
+      state.cumulativeScale,
+      state.dailyScale,
+    ]
   );
 
   //console.log("Memoizedchartoptions", memoizedChartOptions);
@@ -83,25 +115,34 @@ function CovidChart(props: Props): any {
     return <span>Loading...</span>;
   }
 
-  function setHoverData(e) {
-    // The chart is not updated because `chartOptions` has not changed.
-    //this.setState({ hoverData: e.target.category });
-    const newState = { ...state, hoverData: e.target.id };
-    console.log("setHoverData: setState");
-    setState(newState);
-  }
+  // function setHoverData(e) {
+  //   // The chart is not updated because `chartOptions` has not changed.
+  //   //this.setState({ hoverData: e.target.category });
+  //   const newState = { ...state, hoverData: e.target.id };
+  //   console.log("setHoverData: setState");
+  //   setState(newState);
+  // }
 
   function getToggledScaleName(scaleName: string) {
     return scaleName === "logarithmic" ? "linear" : "logarithmic";
   }
 
   function toggleCumulativeScale() {
-    console.log('boo')
+    console.log("boo");
     let newScalingType = getToggledScaleName(state.cumulativeScale);
 
     let newState = { ...state, cumulativeScale: newScalingType };
 
     console.log("toggleCumulativeScale: setState to", newScalingType);
+    setState(newState);
+  }
+
+  function toggleDailyScale() {
+    const newScalingType = getToggledScaleName(state.dailyScale);
+
+    const newState = { ...state, dailyScale: newScalingType };
+
+    console.log("toggleDailyScale: setState to", newScalingType);
     setState(newState);
   }
 
@@ -118,7 +159,15 @@ function CovidChart(props: Props): any {
         size="small"
       >
         {/* Cumulative Scale: {this.state.chartOptions.yAxis[1].type} */}
-        Toggle Cumulative Scale
+        Cumulative Scale: {state.cumulativeScale}
+      </Button>
+      <Button
+        onClick={toggleDailyScale.bind(this)}
+        variant="outlined"
+        color="primary"
+        size="small"
+      >
+        Daily/Avg Scales: {state.dailyScale}
       </Button>
     </div>
   );

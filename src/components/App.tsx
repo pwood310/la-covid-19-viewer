@@ -28,16 +28,17 @@ const App = () => {
       <CountySelector defaultCounty={county} onChange={setCounty} />
       <CovidChart covidType="confirmed_cases" county={county} />
       <CovidChart covidType="deaths" county={county} />
-      
+
       <div className="placeGroup">
-      <PlaceSelector county={county} defaultPlace={place} onChange={setPlace} />
-      <CovidChartPlace
-        covidType="confirmed_cases"
-        county={county}
-        place={place}
-      />
+        <PlaceSelector
+          county={county}
+          defaultPlace={""}
+          onChange={setPlace}
+        />
+
+        <CovidChartPlace county={county} place={place} />
       </div>
-      <Footer />   
+      <Footer />
     </div>
   );
 };

@@ -38,7 +38,7 @@ function CountySelector(props: IProp) {
     "countyTotals",
     retrieve(),
     {
-      staleTime: 5 * 60 * 1000,
+      staleTime: 2 * 3600 * 1000,
       retry: 2,
     }
   );
@@ -51,10 +51,14 @@ function CountySelector(props: IProp) {
     return <span>Loading...</span>;
   }
 
+  if (!data) {
+    return <span>No Data</span>;
+  }
+
   let justNames: string[] = data
     .map((item) => item.county)
     .reduce(
-      (unique, item) => (unique.includes(item) ? unique : [...unique, item]),
+      (unique:string[], item:string) => (unique.includes(item) ? unique : [...unique, item]),
       []
     )
     .sort();
@@ -64,7 +68,7 @@ function CountySelector(props: IProp) {
   //     getOptionLabel: (option) => option,
   //   };
 
-  const handleChange = (event) => {
+  const handleChange = (event:any) => {
     event.preventDefault();
     const cty = event.target.value;
     setCounty(cty);
