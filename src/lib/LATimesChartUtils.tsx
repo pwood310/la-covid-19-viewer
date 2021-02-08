@@ -82,17 +82,18 @@ function capitalizeFirstLetter(s: string) {
   return s.slice(0, 1).toUpperCase() + s.slice(1);
 }
 
-export function snakeToPascal(s: string) {
+export function snakeToPascal(s: string, spacesBetweenWords: boolean = false) {
   if (!s || typeof s != "string") return s;
 
-  s = capitalizeFirstLetter(s);
+  const wordSplitter = new RegExp("[^-_\\s]+", "g");
 
-  let idx = s.indexOf("_");
-  while (idx !== -1) {
-    s = s.slice(0, idx) + capitalizeFirstLetter(s.slice(idx + 1));
-    idx = s.indexOf("_");
+  let result = "";
+  const words = s.match(wordSplitter);
+  for (const w of words) {
+    if (result !== "" && spacesBetweenWords) result += " ";
+    result += capitalizeFirstLetter(w);
   }
-  return s;
+  return result;
 }
 
 export function extractWorkingData(

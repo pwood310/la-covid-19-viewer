@@ -1,6 +1,7 @@
 import axios from "axios";
 import { CSVToObjectTransformer } from "./CSVToObjectTransformer";
 
+
 const URIBase =
   "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
 
@@ -57,8 +58,9 @@ export class LATimesRetriever {
   async retrieve(filename:string): Promise<string> {
     const uri = `${this.uriBase}/${filename}`;
     try {
-      console.log(`retrieve() calling axios for filename=${filename}`);
-      const result = await axios(uri);
+      console.log(`retrieve() calling axios with uri=${uri}`);
+      const result = await axios.get(uri);
+      // console.debug("result", result)
       if (!result || result.status !== 200) {
         let err = result ? result.status : result;
         console.error(
