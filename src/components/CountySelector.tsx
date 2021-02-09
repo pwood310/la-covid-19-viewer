@@ -58,7 +58,7 @@ function CountySelector(props: IProp) {
   let justNames: string[] = data
     .map((item) => item.county)
     .reduce(
-      (unique:string[], item:string) => (unique.includes(item) ? unique : [...unique, item]),
+      (unique: string[], item: string) => (unique.includes(item) ? unique : [...unique, item]),
       []
     )
     .sort();
@@ -68,7 +68,7 @@ function CountySelector(props: IProp) {
   //     getOptionLabel: (option) => option,
   //   };
 
-  const handleChange = (event:any) => {
+  const handleChange = (event: any) => {
     event.preventDefault();
     const cty = event.target.value;
     setCounty(cty);
@@ -77,7 +77,7 @@ function CountySelector(props: IProp) {
 
   return (
     <FormControl variant="filled" className="CountySelector">
-      <InputLabel id="cali-county-select-lbl">County Chooser</InputLabel>
+      <InputLabel id="cali-county-select-lbl">County</InputLabel>
       <Select
         labelId="cali-county-select-label"
         id="cali-county-select"

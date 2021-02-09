@@ -58,7 +58,7 @@ export class LATimesRetriever {
   async retrieve(filename:string): Promise<string> {
     const uri = `${this.uriBase}/${filename}`;
     try {
-      console.log(`retrieve() calling axios with uri=${uri}`);
+      console.debug(`retrieve() calling axios with uri=${uri}`);
       const result = await axios.get(uri);
       // console.debug("result", result)
       if (!result || result.status !== 200) {

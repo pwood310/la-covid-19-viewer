@@ -346,7 +346,6 @@ export function fullyPopulateChartInfo(
   if (!sortedRows || !sortedRows.length) return {};
 
   const chartOptions = createChartOptions(title, cumulativeScale, dailyScale);
-  // console.log("boo", chartOptions);
   setSeriesData(sortedRows, chartOptions);
   return chartOptions;
 }

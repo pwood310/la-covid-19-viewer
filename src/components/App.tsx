@@ -8,20 +8,29 @@ import "./App.scss";
 
 import CountySelector from "./CountySelector";
 import PlaceSelector from "./PlaceSelector";
-import CovidChartPlace from "./CovidChartPlace";
-//import CovidChartOld from "./CovidChartOld";
 
-const App = () => {
+const App = (): JSX.Element => {
   const [county, setCounty] = React.useState("Los Angeles");
-  const [place, setPlace] = React.useState("Santa Monica");
+  //const [countyToPlace, setCountyToPlace] = React.useState({ "Los Angeles": "Santa Monica" });
 
-  console.log("app redrawing");
+  console.debug(`app redrawing with county=${county}`);
 
   // const onCountyChange = (newCounty: string) => {
   //   setCounty(newCounty);
   // };
 
-  console.log("county is", county);
+  // const handlePlaceChange = (place: string) => {
+  //  if (county && place)
+  //     setCountyToPlace({
+  //       ...countyToPlace,
+  //       [county]: place
+  //     });
+  // };
+
+  //const place: string = countyToPlace[county] || "";
+
+  //console.log('using place', place)
+
   return (
     <div>
       <Header />
@@ -32,11 +41,7 @@ const App = () => {
       <div className="placeGroup">
         <PlaceSelector
           county={county}
-          defaultPlace={""}
-          onChange={setPlace}
         />
-
-        <CovidChartPlace county={county} place={place} />
       </div>
       <Footer />
     </div>

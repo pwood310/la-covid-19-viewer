@@ -80,7 +80,7 @@ function CovidChartPlace(props: Props): any {
   const dataReadyForCharting: ChartDailyRow[] = useMemo(
     () => extractWorkingData(filteredData, true, false, 7),
     [filteredData]
-  ) ;
+  );
 
   //console.log("workingData", place, dataReadyForCharting);
 
@@ -110,14 +110,11 @@ function CovidChartPlace(props: Props): any {
   }
 
   if (!filteredData || !filteredData.length) {
-    //
-    let style = { textAlign: "center" };
 
-    return (
-      <p style={{ textAlign: "center" }}>
-        <h3>No 'Place' breakdown for {county} county</h3>
-      </p>
-    );
+    return (<div>
+      <h3 style={{ textAlign: "center" }}>No 'Place' breakdown for {county} county</h3>
+    </div>);
+
   }
 
   // function setHoverData(e) {
@@ -143,7 +140,7 @@ function CovidChartPlace(props: Props): any {
     setState(newState);
   }
 
-  console.log(`Covid Chart Place redrawing for ${county}, ${place}`);
+  console.debug(`Covid Chart Place redrawing for ${county}, ${place}`);
 
   return (
     <div className="CovidChartPlace">

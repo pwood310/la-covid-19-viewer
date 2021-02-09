@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { useQuery } from "react-query";
 import { LATimesRetriever, PlaceTotalsType } from "../lib/LATimesRetriever";
 
@@ -10,6 +10,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
 import "./PlaceSelector.css";
+import CovidChartPlace from "./CovidChartPlace";
 // const useStyles = makeStyles((theme) => ({
 //   formControl: {
 //     margin: theme.spacing(1),
@@ -22,17 +23,22 @@ import "./PlaceSelector.css";
 
 type IProp = {
   county: string;
-  defaultPlace?: string;
-  onChange: (place: string) => void;
 };
+
+const startingCities = { 'Los Angeles': 'Santa Monica', 'San Francisco': '94121' };
 
 function PlaceSelector(props: IProp) {
   // seems not helping problem that only appears in dev mode  const inputEl = React.useRef(null);
   //const classes = useStyles();
   // const [place, setPlace] = useState(props.defaultPlace ?? "");
-  const [place, setPlace] = useState("");
 
-  console.log(`placeSelector: county=${props.county}, place=${place} `);
+  const { county } = props;
+
+  const [placesObject, setPlace] = useState(startingCities);
+
+  const possiblePlace = placesObject[county ?? ""] ?? "";
+
+  console.debug(`placeSelector: county=${county}, place=${possiblePlace}`);
 
   function retrieve(): () => Promise<any[]> {
     const retriever = new LATimesRetriever();
@@ -50,10 +56,10 @@ function PlaceSelector(props: IProp) {
     }
   );
 
-  const { defaultPlace, county, onChange } = props;
+
 
   const justNames: string[] = useMemo(() => {
-    if (!data) return [];
+    if (!data) return null;
 
     return data
       .filter((item) => item.county === county)
@@ -65,69 +71,55 @@ function PlaceSelector(props: IProp) {
       .sort();
   }, [data, county]);
 
-  useEffect(() => {
-    console.log(`useEffect in, ${place}`)
-    if (isLoading) 
-      {
-        console.log('useEffect: still loading so returning')
-        return;
-      }
-    let plc = place;
-    if (!justNames.length) {
-      if (plc !== "") plc = "";
-    } else {
-      if (!justNames.includes(plc)) plc = justNames[0];
-    }
-
-    if (plc !== place) {
-      console.log(`changing ${place} to ${plc}`);
-      setPlace(plc);    
-      if (onChange) onChange(plc);
-      console.log(`useEffect out, ${place}`)
-    }
-
-  }, [justNames, place, onChange, defaultPlace, isLoading]);
-
-  
   const handleChange = (event) => {
     event.preventDefault();
     const plc = event.target.value;
-    setPlace(plc);
-    if (onChange) onChange(plc);
+    setPlace({ ...placesObject, [county]: plc });
   };
 
   if (isError || error) {
     return <span>Error: {error.message}</span>;
   }
 
-  if (isLoading) {
+  if (isLoading || justNames === null) {
     return <span>Loading...</span>;
   }
 
-  if (!justNames.includes(place) && place !== "") {
-    console.log(`place not right yet - bouncing: ${place}`)
-    return <span>Bouncing...</span>;
+  if (justNames.length === 0) {
+    return (<div>
+      <h3 style={{ textAlign: "center" }}>No 'Place' breakdown for {county} county</h3>
+    </div>);
   }
 
-  console.log('normal render')
+  let place = placesObject[county] ?? "";
+
+  if (!justNames.includes(place)) {
+    place = justNames[0];
+  }
+
+  //console.log('normal render')
   return (
-    <FormControl variant="filled" className="PlaceSelector">
-      <InputLabel id="demo-simple-select-label">
-        City or Neighborhood
+    <div>
+
+      <FormControl variant="filled" className="PlaceSelector">
+        <InputLabel id="demo-simple-select-label">
+          City or Neighborhood
       </InputLabel>
-      <Select
-        labelId="cali-place-select-label"
-        id="cali-place-select"
-        value={place}
-        onChange={handleChange}
-      >
-        {justNames.map((plc, index) => (
-          <MenuItem key={index} value={plc}>
-            {plc}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+        <Select
+          labelId="cali-place-select-label"
+          id="cali-place-select"
+          value={place}
+          onChange={handleChange}
+        >
+          {justNames.map((plc, index) => (
+            <MenuItem key={index} value={plc}>
+              {plc}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <CovidChartPlace county={county} place={place} />
+    </div>
   );
 }
 

@@ -83,7 +83,7 @@ function CovidChart(props: Props): any {
 
   //console.log("RawData", rawData);
 
-  const dataReadyForCharting:ChartDailyRow[] = useMemo(
+  const dataReadyForCharting: ChartDailyRow[] = useMemo(
     () => extractWorkingData(filteredData, true, false, 7),
     [filteredData]
   );
@@ -128,12 +128,11 @@ function CovidChart(props: Props): any {
   }
 
   function toggleCumulativeScale() {
-    console.log("boo");
     let newScalingType = getToggledScaleName(state.cumulativeScale);
 
     let newState = { ...state, cumulativeScale: newScalingType };
 
-    console.log("toggleCumulativeScale: setState to", newScalingType);
+    console.debug("toggleCumulativeScale: setState to", newScalingType);
     setState(newState);
   }
 
@@ -142,11 +141,11 @@ function CovidChart(props: Props): any {
 
     const newState = { ...state, dailyScale: newScalingType };
 
-    console.log("toggleDailyScale: setState to", newScalingType);
+    console.debug("toggleDailyScale: setState to", newScalingType);
     setState(newState);
   }
 
-  console.log(`CovidChart redrawing for ${covidType}, ${county}`);
+  console.debug(`CovidChart redrawing for ${covidType}, ${county}`);
 
   return (
     <div className="CovidChart">
