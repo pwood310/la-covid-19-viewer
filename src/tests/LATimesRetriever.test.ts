@@ -16,7 +16,7 @@ describe("LATimesRetriever Tests", () => {
     const retriever = new LATimesRetriever();
     let result: PlaceTotalsType[] = await retriever.retrievePlaceTotals();
     expect(result).toBeTruthy();
-    expect(result.length).toBeGreaterThanOrEqual(142000);
+    expect(result.length).toBeGreaterThanOrEqual(409427);
 
   });
 

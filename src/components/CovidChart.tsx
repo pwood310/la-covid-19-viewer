@@ -92,7 +92,7 @@ function CovidChart(props: Props): any {
     () =>
       fullyPopulateChartInfo(
         dataReadyForCharting,
-        county + " - " + snakeToPascal(covidType),
+        county + " County - " + snakeToPascal(covidType),
         state.cumulativeScale,
         state.dailyScale
       ),
@@ -152,22 +152,24 @@ function CovidChart(props: Props): any {
       <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions} />
       {/* <h3>Hovering over {hoverData}</h3> */}
       <Button
-        onClick={toggleCumulativeScale.bind(this)}
-        variant="outlined"
-        color="primary"
-        size="small"
-      >
-        {/* Cumulative Scale: {this.state.chartOptions.yAxis[1].type} */}
-        Cumulative Scale: {state.cumulativeScale}
-      </Button>
-      <Button
         onClick={toggleDailyScale.bind(this)}
         variant="outlined"
         color="primary"
         size="small"
       >
-        Daily/Avg Scales: {state.dailyScale}
+        Avg/Daily Scales: {state.dailyScale}
       </Button>
+      <Button
+          onClick={toggleCumulativeScale.bind(this)}
+          variant="outlined"
+          color="primary"
+          size="small"
+      >
+        {/* Cumulative Scale: {this.state.chartOptions.yAxis[1].type} */}
+        Cumulative Scale: {state.cumulativeScale}
+      </Button>
+
+
     </div>
   );
 }

@@ -63,7 +63,7 @@ function PlaceSelector(props: IProp) {
 
     return data
       .filter((item) => item.county === county)
-      .map((item) => item.place)
+      .map((item) => item.name)
       .reduce(
         (unique, item) => (unique.includes(item) ? unique : [...unique, item]),
         []

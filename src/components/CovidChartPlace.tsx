@@ -1,170 +1,170 @@
 // import { render } from 'react-dom';
-import React, { useState, useMemo } from "react";
+import React, {useState, useMemo} from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 //import _ from "lodash";
-import { withStyles } from "@material-ui/core/styles";
+import {withStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { useQuery } from "react-query";
+import {useQuery} from "react-query";
 
 import "./CovidChartPlace.css";
 
 import {
-  LATimesRetriever,
-  PlaceTotalsType,
+    LATimesRetriever,
+    PlaceTotalsType,
 } from "../lib/LATimesRetriever";
 import {
-  ChartDailyRowInput,
-  ChartDailyRow,
-  extractWorkingData,
-  fullyPopulateChartInfo,
+    ChartDailyRowInput,
+    ChartDailyRow,
+    extractWorkingData,
+    fullyPopulateChartInfo,
 } from "../lib/LATimesChartUtils";
 
 const useStyles = (theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
+    root: {
+        "& > *": {
+            margin: theme.spacing(1),
+        },
     },
-  },
 });
 
 type Props = {
-  county: string;
-  place: string;
+    county: string;
+    place: string;
 };
 
 interface IState {
-  cumulativeScale: any;
-  dailyScale: any;
-  hoverData: any;
+    cumulativeScale: any;
+    dailyScale: any;
+    hoverData: any;
 }
 
 function CovidChartPlace(props: Props): any {
-  const [state, setState] = useState<IState>({
-    cumulativeScale: "linear",
-    dailyScale: "linear",
-    hoverData: null,
-  });
+    const [state, setState] = useState<IState>({
+        cumulativeScale: "linear",
+        dailyScale: "linear",
+        hoverData: null,
+    });
 
-  const { county, place } = props;
+    const {county, place} = props;
 
-  function retrieve(): () => Promise<PlaceTotalsType[]> {
-    const retriever = new LATimesRetriever();
-    return async () => {
-      return await retriever.retrievePlaceTotals();
-    };
-  }
-
-  const { isLoading, isError, data, error } = useQuery<PlaceTotalsType[], any>(
-    "placeTotals",
-    retrieve(),
-    {
-      staleTime: 2 * 3600 * 1000,
-      retry: 2,
-    }
-  );
-
-  const filteredData: ChartDailyRowInput[] = useMemo(() => {
-    if (!data || !data.length) return [];
-    return data
-      .filter((item) => item.county === county && item.place === place)
-      .map((row: PlaceTotalsType) => {
-        return {
-          date: row.date,
-          rawCumulative: row.confirmed_cases,
-          rawDaily: 0,
+    function retrieve(): () => Promise<PlaceTotalsType[]> {
+        const retriever = new LATimesRetriever();
+        return async () => {
+            return await retriever.retrievePlaceTotals();
         };
-      });
-  }, [data, county, place]);
+    }
 
-  const dataReadyForCharting: ChartDailyRow[] = useMemo(
-    () => extractWorkingData(filteredData, true, false, 7),
-    [filteredData]
-  );
+    const {isLoading, isError, data, error} = useQuery<PlaceTotalsType[], any>(
+        "placeTotals",
+        retrieve(),
+        {
+            staleTime: 2 * 3600 * 1000,
+            retry: 2,
+        }
+    );
 
-  //console.log("workingData", place, dataReadyForCharting);
+    const filteredData: ChartDailyRowInput[] = useMemo(() => {
+        if (!data || !data.length) return [];
+        return data
+            .filter((item) => item.county === county && item.name === place)
+            .map((row: PlaceTotalsType) => {
+                return {
+                    date: row.date,
+                    rawCumulative: row.confirmed_cases,
+                    rawDaily: 0,
+                };
+            });
+    }, [data, county, place]);
 
-  const memoizedChartOptions = useMemo(
-    () =>
-      fullyPopulateChartInfo(
-        dataReadyForCharting,
-        `${place} in ${county} - ConfirmedCases`,
-        state.cumulativeScale,
-        state.dailyScale
-      ),
-    [
-      dataReadyForCharting,
-      county,
-      place,
-      state.cumulativeScale,
-      state.dailyScale,
-    ]
-  );
+    const dataReadyForCharting: ChartDailyRow[] = useMemo(
+        () => extractWorkingData(filteredData, true, false, 7),
+        [filteredData]
+    );
 
-  if (isError || error) {
-    return <span>Error: {error.message}</span>;
-  }
+    //console.log("workingData", place, dataReadyForCharting);
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
+    const memoizedChartOptions = useMemo(
+        () =>
+            fullyPopulateChartInfo(
+                dataReadyForCharting,
+                `${place} - ConfirmedCases`,
+                state.cumulativeScale,
+                state.dailyScale
+            ),
+        [
+            dataReadyForCharting,
+            place,
+            state.cumulativeScale,
+            state.dailyScale,
+        ]
+    );
 
-  if (!filteredData || !filteredData.length) {
+    if (isError || error) {
+        return <span>Error: {error.message}</span>;
+    }
 
-    return (<div>
-      <h3 style={{ textAlign: "center" }}>No 'Place' breakdown for {county} county</h3>
-    </div>);
+    if (isLoading) {
+        return <span>Loading...</span>;
+    }
 
-  }
+    if (!filteredData || !filteredData.length) {
 
-  // function setHoverData(e) {
-  //   // The chart is not updated because `chartOptions` has not changed.
-  //   //this.setState({ hoverData: e.target.category });
-  //   const newState = { ...state, hoverData: e.target.id };
-  //   console.log("setHoverData: setState");
-  //   setState(newState);
-  // }
+        return (<div>
+            <h3 style={{textAlign: "center"}}>No 'Place' breakdown for {county} county</h3>
+        </div>);
 
-  function getToggledScaleName(scaleName: string) {
-    return scaleName === "logarithmic" ? "linear" : "logarithmic";
-  }
+    }
 
-  function toggleCumulativeScale() {
-    const newScalingType = getToggledScaleName(state.cumulativeScale);
-    const newState = { ...state, cumulativeScale: newScalingType };
-    setState(newState);
-  }
-  function toggleDailyScale() {
-    const newScalingType = getToggledScaleName(state.dailyScale);
-    const newState = { ...state, dailyScale: newScalingType };
-    setState(newState);
-  }
+    // function setHoverData(e) {
+    //   // The chart is not updated because `chartOptions` has not changed.
+    //   //this.setState({ hoverData: e.target.category });
+    //   const newState = { ...state, hoverData: e.target.id };
+    //   console.log("setHoverData: setState");
+    //   setState(newState);
+    // }
 
-  console.debug(`Covid Chart Place redrawing for ${county}, ${place}`);
+    function getToggledScaleName(scaleName: string) {
+        return scaleName === "logarithmic" ? "linear" : "logarithmic";
+    }
 
-  return (
-    <div className="CovidChartPlace">
-      <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions} />
-      {/* <h3>Hovering over {hoverData}</h3> */}
+    function toggleCumulativeScale() {
+        const newScalingType = getToggledScaleName(state.cumulativeScale);
+        const newState = {...state, cumulativeScale: newScalingType};
+        setState(newState);
+    }
 
-      <Button
-        onClick={toggleCumulativeScale.bind(this)}
-        variant="outlined"
-        color="primary"
-        size="small"
-      >
-        Cumulative Scale: {state.cumulativeScale}
-      </Button>
-      <Button
-        onClick={toggleDailyScale.bind(this)}
-        variant="outlined"
-        color="primary"
-        size="small"
-      >
-        Daily/Avg Scale: {state.dailyScale}
-      </Button>
-    </div>
-  );
+    function toggleDailyScale() {
+        const newScalingType = getToggledScaleName(state.dailyScale);
+        const newState = {...state, dailyScale: newScalingType};
+        setState(newState);
+    }
+
+    console.debug(`Covid Chart Place redrawing for ${county}, ${place}`);
+
+    return (
+        <div className="CovidChartPlace">
+            <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions}/>
+            {/* <h3>Hovering over {hoverData}</h3> */}
+
+            <Button
+                onClick={toggleDailyScale.bind(this)}
+                variant="outlined"
+                color="primary"
+                size="small"
+            >
+                Avg/Daily Scale: {state.dailyScale}
+            </Button>
+            <Button
+                onClick={toggleCumulativeScale.bind(this)}
+                variant="outlined"
+                color="primary"
+                size="small"
+            >
+                Cumulative Scale: {state.cumulativeScale}
+            </Button>
+        </div>
+    );
 }
 
 export default withStyles(useStyles)(CovidChartPlace);

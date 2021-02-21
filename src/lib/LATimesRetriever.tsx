@@ -12,10 +12,11 @@ export type BaseTotalsType = {
 };
 
 export interface PlaceTotalsType extends BaseTotalsType {
+  id: string,
   date: string; //	The date when the data were retrieved in ISO 8601 format.
   county: string; //The name of the county where the city is located.
   fips: string; //	The FIPS code given to the county by the federal government. Can be used to merge with other data sources.
-  place: string; //	The name of the city, neighborhood or other area.
+  name: string; //	formerly called 'place': The name of the city, neighborhood or other area.
   confirmed_cases: number; //	integer	The cumulative number of confirmed coronavirus case at that time.
   note: string; //	In cases where the confirmed_cases are obscured, this explains the range of possible values.
   x: number; //float	The longitude of the place.
