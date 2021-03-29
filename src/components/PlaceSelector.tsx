@@ -62,7 +62,7 @@ function PlaceSelector(props: IProp) {
     if (!data || !data.recordCount ) return null;
 
     const countyPlaces = data.countyToPlaceData[county];
-    if (!countyPlaces) return null;
+    if (!countyPlaces) return [];
 
     return Object.keys(countyPlaces)
       .sort();
