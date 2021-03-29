@@ -11,7 +11,8 @@ import "./CovidChartPlace.css";
 
 import {
     LATimesRetriever,
-    PlaceTotalsType,
+    PlaceTotals,
+    PlaceDateTotal
 } from "../lib/LATimesRetriever";
 import {
     ChartDailyRowInput,
@@ -48,14 +49,14 @@ function CovidChartPlace(props: Props): any {
 
     const {county, place} = props;
 
-    function retrieve(): () => Promise<PlaceTotalsType[]> {
+    function retrieve(): () => Promise<PlaceTotals> {
         const retriever = new LATimesRetriever();
         return async () => {
             return await retriever.retrievePlaceTotals();
         };
     }
 
-    const {isLoading, isError, data, error} = useQuery<PlaceTotalsType[], any>(
+    const {isLoading, isError, data, error} = useQuery<PlaceTotals, any>(
         "placeTotals",
         retrieve(),
         {
@@ -65,10 +66,12 @@ function CovidChartPlace(props: Props): any {
     );
 
     const filteredData: ChartDailyRowInput[] = useMemo(() => {
-        if (!data || !data.length) return [];
-        return data
-            .filter((item) => item.county === county && item.name === place)
-            .map((row: PlaceTotalsType) => {
+        if (!data || !data.recordCount ) return [];
+        const countyMap = data.countyToPlaceData[county];
+        const placeRows = countyMap[place];
+        if (!placeRows) return [];
+
+        return placeRows.map((row: PlaceDateTotal) => {
                 return {
                     date: row.date,
                     rawCumulative: row.confirmed_cases,

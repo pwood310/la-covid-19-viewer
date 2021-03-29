@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useQuery } from "react-query";
-import { LATimesRetriever, PlaceTotalsType } from "../lib/LATimesRetriever";
+import {LATimesRetriever, PlaceTotals} from "../lib/LATimesRetriever";
 
 // import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -40,14 +40,14 @@ function PlaceSelector(props: IProp) {
 
   console.debug(`placeSelector: county=${county}, place=${possiblePlace}`);
 
-  function retrieve(): () => Promise<any[]> {
+  function retrieve(): () => Promise<PlaceTotals> {
     const retriever = new LATimesRetriever();
     return async () => {
       return await retriever.retrievePlaceTotals();
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<PlaceTotalsType[], any>(
+  const { isLoading, isError, data, error } = useQuery<PlaceTotals, any>(
     "placeTotals",
     retrieve(),
     {
@@ -59,15 +59,12 @@ function PlaceSelector(props: IProp) {
 
 
   const justNames: string[] = useMemo(() => {
-    if (!data) return null;
+    if (!data || !data.recordCount ) return null;
 
-    return data
-      .filter((item) => item.county === county)
-      .map((item) => item.name)
-      .reduce(
-        (unique, item) => (unique.includes(item) ? unique : [...unique, item]),
-        []
-      )
+    const countyPlaces = data.countyToPlaceData[county];
+    if (!countyPlaces) return null;
+
+    return Object.keys(countyPlaces)
       .sort();
   }, [data, county]);
 

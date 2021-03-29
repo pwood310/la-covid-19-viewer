@@ -11,7 +11,8 @@ import "./CovidChart.css";
 
 import {
   LATimesRetriever,
-  CountyTotalsType,
+  CountyTotals,
+  CountyDateTotal,
 } from "../lib/LATimesRetriever";
 //import { fullyPopulateChartInfo, filterAndSortByDate } from "../lib/LATimesChartUtils";
 import {
@@ -50,14 +51,14 @@ function CovidChart(props: Props): any {
 
   const { county, covidType } = props;
 
-  function retrieve(): () => Promise<CountyTotalsType[]> {
+  function retrieve(): () => Promise<CountyTotals> {
     const retriever = new LATimesRetriever();
     return async () => {
       return await retriever.retrieveCountyTotals();
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<CountyTotalsType[], any>(
+  const { isLoading, isError, data, error } = useQuery<CountyTotals, any>(
     "countyTotals",
     retrieve(),
     {
@@ -67,10 +68,9 @@ function CovidChart(props: Props): any {
   );
 
   const filteredData: ChartDailyRowInput[] = useMemo(() => {
-    if (!data || !data.length) return [];
-    return data
-      .filter((item) => item.county === county)
-      .map((row: CountyTotalsType) => {
+    if (!data || !data.recordCount || !data.countyToTotals[county]) return [];
+    return data.countyToTotals[county]
+      .map((row: CountyDateTotal) => {
         return {
           date: row.date,
           rawCumulative:

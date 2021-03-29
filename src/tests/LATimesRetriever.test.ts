@@ -1,23 +1,22 @@
 import React from 'react';
 //import { render } from '@testing-library/react';
-import { LATimesRetriever, CountyTotalsType, PlaceTotalsType } from '../lib/LATimesRetriever';
+import {LATimesRetriever, PlaceTotals, CountyTotals} from '../lib/LATimesRetriever';
 
 
 describe("LATimesRetriever Tests", () => {
   test('retrieves CountyTotals', async () => {
     const retriever = new LATimesRetriever();
-    let result: CountyTotalsType[] = await retriever.retrieveCountyTotals();
+    let result: CountyTotals = await retriever.retrieveCountyTotals();
     expect(result).toBeTruthy();
-    expect(result.length).toBeGreaterThanOrEqual(11100);
+    expect(result.recordCount).toBeGreaterThanOrEqual(11100);
 
   });
 
   test('retrieves PlaceTotals', async () => {
     const retriever = new LATimesRetriever();
-    let result: PlaceTotalsType[] = await retriever.retrievePlaceTotals();
+    let result: PlaceTotals = await retriever.retrievePlaceTotals();
     expect(result).toBeTruthy();
-    expect(result.length).toBeGreaterThanOrEqual(409427);
-
+    expect(result.recordCount).toBeGreaterThanOrEqual(409427);
   });
 
   beforeEach(() => {

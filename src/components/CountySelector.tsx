@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { LATimesRetriever, CountyTotalsType } from "../lib/LATimesRetriever";
+import { LATimesRetriever, CountyTotals } from "../lib/LATimesRetriever";
 
 // import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -27,14 +27,14 @@ function CountySelector(props: IProp) {
   //const classes = useStyles();
   const [county, setCounty] = useState(props.defaultCounty ?? "Los Angeles");
 
-  function retrieve(): () => Promise<any[]> {
+  function retrieve(): () => Promise<CountyTotals> {
     const retriever = new LATimesRetriever();
     return async () => {
       return await retriever.retrieveCountyTotals();
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<CountyTotalsType[], any>(
+  const { isLoading, isError, data, error } = useQuery<CountyTotals, any>(
     "countyTotals",
     retrieve(),
     {
@@ -55,8 +55,7 @@ function CountySelector(props: IProp) {
     return <span>No Data</span>;
   }
 
-  let justNames: string[] = data
-    .map((item) => item.county)
+  let justNames: string[] = Object.keys(data.countyToTotals)
     .reduce(
       (unique: string[], item: string) => (unique.includes(item) ? unique : [...unique, item]),
       []
