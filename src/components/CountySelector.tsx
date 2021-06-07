@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { QueryClientProvider, QueryClient, useQuery } from "react-query";
+
 import { LATimesRetriever, CountyTotals } from "../lib/LATimesRetriever";
 
 // import { makeStyles } from "@material-ui/core/styles";
@@ -20,7 +21,11 @@ import "./CountySelector.css";
 //   },
 // }));
 
-type IProp = { defaultCounty?: string; onChange: (county: string) => void };
+
+const queryClient = new QueryClient()
+
+
+type IProp = { defaultCounty?: string; queryClient: QueryClient; onChange: (county: string) => void };
 
 function CountySelector(props: IProp) {
   // seems not helping problem that only appears in dev mode  const inputEl = React.useRef(null);
@@ -34,7 +39,7 @@ function CountySelector(props: IProp) {
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<CountyTotals, any>(
+  const { isLoading, isError, data, error, isFetching } = useQuery<CountyTotals, any>(
     "countyTotals",
     retrieve(),
     {

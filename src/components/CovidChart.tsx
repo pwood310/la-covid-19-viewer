@@ -5,7 +5,7 @@ import Highcharts from "highcharts";
 //import _ from "lodash";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { useQuery } from "react-query";
+import { QueryClientProvider, QueryClient, useQuery } from "react-query";
 
 import "./CovidChart.css";
 
@@ -42,6 +42,8 @@ interface IState {
   hoverData: any;
 }
 
+const queryClient = new QueryClient()
+
 function CovidChart(props: Props): any {
   const [state, setState] = useState<IState>({
     cumulativeScale: "linear",
@@ -58,7 +60,7 @@ function CovidChart(props: Props): any {
     };
   }
 
-  const { isLoading, isError, data, error } = useQuery<CountyTotals, any>(
+  const { isLoading, isError, data, error, isFetching } = useQuery<CountyTotals, any>(
     "countyTotals",
     retrieve(),
     {

@@ -35,7 +35,7 @@ const URIBase =
 
 
 export type CountyDateTotal = {
-  date: string; //The date when the data were retrieved in ISO 8601 format.
+  date: Date; //The date when the data were retrieved in ISO 8601 format.
   confirmed_cases: number; //	integer	The cumulative number of confirmed coronavirus case at that time.
   deaths: number; // integer	The cumulative number of deaths at that time.
   new_confirmed_cases: number; //	integer	The net change in confirmed cases over the previous date.
@@ -48,7 +48,7 @@ export type CountyTotals = {
 };
 
 export type PlaceDateTotal = {
-  date: string; //The date when the data were retrieved in ISO 8601 format.
+  date: Date; //The date when the data were retrieved in ISO 8601 format.
   confirmed_cases: number; //	integer	The cumulative number of confirmed coronavirus case at that time.
   new_confirmed_cases: number; //	integer	The net change in confirmed cases over the previous date.
 }
@@ -70,7 +70,7 @@ export class LATimesRetriever {
   }
 
   async retrieveCountyTotals(): Promise<CountyTotals> {
-    const fileContents: string = await this.retrieve("latimes-county-totals.csv");
+    let fileContents: string = await this.retrieve("latimes-county-totals.csv");
 
     const countyToTotals = {};
     const rv: CountyTotals = {
@@ -85,7 +85,7 @@ export class LATimesRetriever {
 
       let rows = countyToTotals[line.county];
       let row = {
-        date: line.date,  //new Date(line.date),
+        date: new Date(line.date+"T00:00:00"),
         confirmed_cases: Number(line.confirmed_cases),
         deaths: Number(line.deaths),
         new_confirmed_cases: Number(line.new_confirmed_cases),
@@ -95,13 +95,13 @@ export class LATimesRetriever {
     };
 
     rv.recordCount = await this.csvTransformer.transformNew(fileContents, lineTransformer);
-
+    fileContents = null;
     return rv;
   }
 
 
   async retrievePlaceTotals(): Promise<PlaceTotals> {
-    const fileContents: string = await this.retrieve("latimes-place-totals.csv");
+    let fileContents: string = await this.retrieve("latimes-place-totals.csv");
 
     let mapCountyToPlaceToRows = {};
 
@@ -122,14 +122,14 @@ export class LATimesRetriever {
       let rows = places[line.name];
 
       let row = {
-        date: line.date, //new Date(line.date),
+        date: new Date(line.date+"T00:00:00"),
         confirmed_cases: Number(line.confirmed_cases),
         population: Number(line.population),
       };
       rows.push(row);
     };
     rv.recordCount = await this.csvTransformer.transformNew(fileContents, lineTransformer);
-
+    fileContents = null
     return rv;
   }
 

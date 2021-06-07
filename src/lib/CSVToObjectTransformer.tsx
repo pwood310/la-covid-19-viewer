@@ -2,9 +2,9 @@ import csvParse from "csv-parse";
 
 export class CSVToObjectTransformer {
   readonly DefaultNameToTypeInitializer: [string, string][] = [
-    //["date", "date"],
+    ["date", "date"],
     ["id", "string"],
-    ["date", "string"],
+    // ["date", "string"],
     ["county", "string"],
     ["fips", "string"],
     ["place", "string"],

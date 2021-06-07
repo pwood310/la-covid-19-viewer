@@ -9,6 +9,11 @@ import "./App.scss";
 import CountySelector from "./CountySelector";
 import PlaceSelector from "./PlaceSelector";
 
+import { QueryClientProvider, QueryClient } from "react-query";
+
+const queryClient = new QueryClient()
+
+
 const App = (): JSX.Element => {
   const [county, setCounty] = React.useState("Los Angeles");
   //const [countyToPlace, setCountyToPlace] = React.useState({ "Los Angeles": "Santa Monica" });
@@ -32,9 +37,10 @@ const App = (): JSX.Element => {
   //console.log('using place', place)
 
   return (
+    <QueryClientProvider client={queryClient}>
     <div>
       <Header />
-      <CountySelector defaultCounty={county} onChange={setCounty} />
+      <CountySelector defaultCounty={county} queryClient={queryClient} onChange={setCounty} />
       <CovidChart covidType="confirmed_cases" county={county} />
       <CovidChart covidType="deaths" county={county} />
 
@@ -45,6 +51,7 @@ const App = (): JSX.Element => {
       </div>
       <Footer />
     </div>
+    </QueryClientProvider>
   );
 };
 

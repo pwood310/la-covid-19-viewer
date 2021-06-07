@@ -8,14 +8,14 @@ Highcharts.setOptions({
 });
 
 export interface ChartDailyRowInput {
-  date: string; //	The date when the data were retrieved in ISO 8601 format.
+  date: Date; //	The date when the data were retrieved
   rawCumulative: number; // The raw cumulative data sometimes decreases due to faulty reporting.
   rawDaily: number; //	reported daily - can be faulty and not same as delta of cumulative
 }
 
 export interface ChartDailyRow {
-  date: string; //	The date when the data were retrieved in ISO 8601 format.
-  dateObj: Date;
+  // date: string; //	The date when the data were retrieved in ISO 8601 format.
+  date: Date;
   cumulative: number; // value after raw data is processed to never let it decrease
   daily: number; // the daily values derived from the deltas of the monotonicCumulative
   runningAvg: number; // (usually 7 day) running average
@@ -39,7 +39,7 @@ function calculateDoublingDays(
 
   // usually daysElapsed is 1, but we need to cover gaps in days reported and interpolate
   const daysElapsed = Math.round(
-    (today.dateObj.valueOf() - prevDay.dateObj.valueOf()) / (3600 * 24 * 1000)
+    (today.date.valueOf() - prevDay.date.valueOf()) / (3600 * 24 * 1000)
   );
 
   // ratio = log(2)/log(ratio)
@@ -60,7 +60,7 @@ function constructGraphDataArrays(
 
   for (let i = 0; i < arrayOfObj.length; i++) {
     const currentDay: ChartDailyRow = arrayOfObj[i];
-    const date = currentDay.dateObj.valueOf();
+    const date = currentDay.date.valueOf();
 
     const doublingDays: number = calculateDoublingDays(prevDay, currentDay);
 
@@ -123,7 +123,7 @@ export function extractWorkingData(
   const answ: ChartDailyRow[] = [];
   for (let i = 0; i < sortedInput.length; i++) {
     const row: ChartDailyRowInput = sortedInput[i];
-    let dateObj: Date = new Date(row.date + "T00:00:00");
+    let date: Date = row.date;
 
     let cumulative: number;
     let daily: number;
@@ -131,7 +131,7 @@ export function extractWorkingData(
     if (i !== 0) {
       let prevValue = answ[i - 1];
       let daysBetween =
-        (dateObj.valueOf() - prevValue.dateObj.valueOf()) / (3600 * 24 * 1000);
+        (date.valueOf() - prevValue.date.valueOf()) / (3600 * 24 * 1000);
       if (daysBetween > 1) {
         let rng = Math.min(daysBetween - 1, daysInRunningAverage);
         for (let i = 0; i < rng; i++) pushToRingBuff(prevValue.cumulative);
@@ -160,8 +160,8 @@ export function extractWorkingData(
       if (daily < 0) daily = 0;
     }
     const newRow: ChartDailyRow = {
-      date: row.date,
-      dateObj: dateObj,
+      // date: row.date.toISOString(),
+      date: date,
       cumulative: cumulative,
       daily: daily,
       runningAvg: runningAverage,
