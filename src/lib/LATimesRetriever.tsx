@@ -69,7 +69,7 @@ export class LATimesRetriever {
     this.csvTransformer = new CSVToObjectTransformer();
   }
 
-  async retrieveCountyTotals(): Promise<CountyTotals> {
+  async oldRetrieveCountyTotals(): Promise<CountyTotals> {
     let fileContents: string = await this.retrieve("latimes-county-totals.csv");
 
     const countyToTotals = {};
@@ -90,6 +90,36 @@ export class LATimesRetriever {
         deaths: Number(line.deaths),
         new_confirmed_cases: Number(line.new_confirmed_cases),
         new_deaths: Number(line.new_deaths),
+      };
+      rows.push(row);
+    };
+
+    rv.recordCount = await this.csvTransformer.transformNew(fileContents, lineTransformer);
+    fileContents = null;
+    return rv;
+  }
+
+  async retrieveCountyTotals(): Promise<CountyTotals> {
+    let fileContents: string = await this.retrieve("cdph-county-cases-deaths.csv");
+
+    const countyToTotals = {};
+    const rv: CountyTotals = {
+      recordCount: 0,
+      countyToTotals: countyToTotals
+    };
+
+    let lineTransformer = (line) => {
+
+      if (!rv.countyToTotals[line.county])
+        countyToTotals[line.county] = [];
+
+      let rows = countyToTotals[line.county];
+      let row = {
+        date: new Date(line.date+"T00:00:00"),
+        confirmed_cases: Number(line.reported_cases),
+        deaths: Number(line.reported_deaths),
+        new_confirmed_cases: Number(0),
+        new_deaths: Number(0),
       };
       rows.push(row);
     };
