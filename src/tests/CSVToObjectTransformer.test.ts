@@ -2,6 +2,7 @@ import React from 'react';
 //import { render } from '@testing-library/react';
 import {CSVToObjectTransformer} from '../lib/CSVToObjectTransformer';
 
+
 describe("Retriever parsing", () => {
 
     test('transforms csv with new place file format', async () => {
