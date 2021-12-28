@@ -20,7 +20,7 @@ describe("Retriever parsing", () => {
             {
                 id: "94501",
                 name: '94501: Alameda',
-                date: '2021-02-21',
+                date: new Date('2021-02-21'),
                 county: 'Alameda',
                 fips: '001',
                 confirmed_cases: 1950,
@@ -45,8 +45,7 @@ describe("Retriever parsing", () => {
         expect(la['county']).toBe("Los Angeles");
         expect(la).toStrictEqual(
             {
-                //"date": new Date("2020-09-18"),
-                "date": "2020-09-18",
+                "date": new Date("2020-09-18T00:00:00.000Z"),
                 "county": "Los Angeles",
                 "fips": "037",
                 "confirmed_cases": 258587,
@@ -62,7 +61,7 @@ describe("Retriever parsing", () => {
         expect(yolo).toStrictEqual(
             {
                 //"date": new Date("2020-01-26"),
-                "date": "2020-01-26",
+                "date": new Date("2020-01-26T00:00:00.000Z"),
                 "county": "Yolo",
                 "fips": "113",
                 "confirmed_cases": 0,
@@ -109,7 +108,7 @@ describe("Retriever parsing", () => {
 
         expect(la).toStrictEqual(
             [{
-                "date": new Date("2020-09-18"),
+                "date": new Date("2020-09-18T00:00:00.000Z"),
                 "confirmed_cases": 258587,
                 "deaths": 6330,
                 "new_confirmed_cases": 1244,

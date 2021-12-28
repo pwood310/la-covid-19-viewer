@@ -1,4 +1,6 @@
-import csvParse from "csv-parse";
+
+import { Parser, parse, CastingContext} from 'csv-parse';
+//import csvParse from "csv-parse";
 
 export class CSVToObjectTransformer {
   readonly DefaultNameToTypeInitializer: [string, string][] = [
@@ -24,7 +26,7 @@ export class CSVToObjectTransformer {
   // because of the way the castingFunction is used by csv-parse, we do a trick
   // to keep the this from binding dynamically in the calling context
   // that way the 'this.nameToTypeMap' still refers to our object-local value
-  castingFunction = (value: string, context: csvParse.CastingContext): any => {
+  castingFunction = (value: string, context: CastingContext): any => {
     if (context.header)
       return value;
 
@@ -54,7 +56,7 @@ export class CSVToObjectTransformer {
 
   async transform(csvString: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      csvParse(csvString, {
+      parse(csvString, {
         columns: true,
         cast: this.castingFunction
       }, (e, output) => {
@@ -67,7 +69,7 @@ export class CSVToObjectTransformer {
   async transformNew(csvString: string, transformer: (parsedLine: any) => void): Promise<number> {
     return new Promise((resolve, reject) => {
       let recordCount: number = 0;
-      csvParse(csvString, {
+      parse(csvString, {
           columns: true,
         }
       )
