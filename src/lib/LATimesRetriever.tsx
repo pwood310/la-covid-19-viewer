@@ -1,6 +1,5 @@
-import axios from "axios";
-import {CSVToObjectTransformer} from "./CSVToObjectTransformer";
-
+import { CSVToObjectTransformer } from "./CSVToObjectTransformer";
+import https from "https";
 
 const URIBase =
   "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master";
@@ -69,38 +68,9 @@ export class LATimesRetriever {
     this.csvTransformer = new CSVToObjectTransformer();
   }
 
-  async oldRetrieveCountyTotals(): Promise<CountyTotals> {
-    let fileContents: string = await this.retrieve("latimes-county-totals.csv");
-
-    const countyToTotals = {};
-    const rv: CountyTotals = {
-      recordCount: 0,
-      countyToTotals: countyToTotals
-    };
-
-    let lineTransformer = (line) => {
-
-      if (!rv.countyToTotals[line.county])
-        countyToTotals[line.county] = [];
-
-      let rows = countyToTotals[line.county];
-      let row = {
-        date: new Date(line.date+"T00:00:00"),
-        confirmed_cases: Number(line.confirmed_cases),
-        deaths: Number(line.deaths),
-        new_confirmed_cases: Number(line.new_confirmed_cases),
-        new_deaths: Number(line.new_deaths),
-      };
-      rows.push(row);
-    };
-
-    rv.recordCount = await this.csvTransformer.transformNew(fileContents, lineTransformer);
-    fileContents = null;
-    return rv;
-  }
-
+  
   async retrieveCountyTotals(): Promise<CountyTotals> {
-    let fileContents: string = await this.retrieve("cdph-county-cases-deaths.csv");
+    let readerStream: any = await this.retrieveAsStream("cdph-county-cases-deaths.csv");
 
     const countyToTotals = {};
     const rv: CountyTotals = {
@@ -115,23 +85,22 @@ export class LATimesRetriever {
 
       let rows = countyToTotals[line.county];
       let row = {
-        date: new Date(line.date+"T00:00:00"),
-        confirmed_cases: Number(line.reported_cases),
-        deaths: Number(line.reported_deaths),
+        date: line.date,
+        confirmed_cases: line.reported_cases,
+        deaths: line.reported_deaths,
         new_confirmed_cases: Number(0),
         new_deaths: Number(0),
       };
       rows.push(row);
     };
 
-    rv.recordCount = await this.csvTransformer.transformNew(fileContents, lineTransformer);
-    fileContents = null;
+    rv.recordCount = await this.csvTransformer.transformStream(readerStream, lineTransformer);
     return rv;
   }
 
 
   async retrievePlaceTotals(): Promise<PlaceTotals> {
-    let fileContents: string = await this.retrieve("latimes-place-totals.csv");
+    let readerStream: any = await this.retrieveAsStream("latimes-place-totals.csv");
 
     let mapCountyToPlaceToRows = {};
 
@@ -152,34 +121,43 @@ export class LATimesRetriever {
       let rows = places[line.name];
 
       let row = {
-        date: new Date(line.date+"T00:00:00"),
-        confirmed_cases: Number(line.confirmed_cases),
-        population: Number(line.population),
+        date: line.date,
+        confirmed_cases: line.confirmed_cases,
+        population: line.population,
       };
       rows.push(row);
     };
-    rv.recordCount = await this.csvTransformer.transformNew(fileContents, lineTransformer);
-    fileContents = null
+    rv.recordCount = await this.csvTransformer.transformStream(readerStream, lineTransformer);
     return rv;
   }
 
-  async retrieve(filename: string): Promise<string> {
+  // return a stream
+  async retrieveAsStream(filename: string): Promise<any> {
     const uri = `${this.uriBase}/${filename}`;
-    try {
-      console.debug(`retrieve() calling axios with uri=${uri}`);
-      const result = await axios.get(uri);
-      // console.debug("result", result)
-      if (!result || result.status !== 200) {
-        let err = result ? result.status : result;
-        console.error(
-          "bad status from axios retrieve: ", err);
-        throw new Error(`LATimesRetriever.retrieve(${uri}) failed: ${err}`);
+
+    return new Promise((resolve, reject) => {
+      try {
+        // console.debug(`retrieve() calling get with uri=${uri}`);
+        const request = https.get(uri);
+        request.on('response', (res) => {
+          if (!res || res.statusCode != 200) {
+            let err = res ? res.statusCode : res;
+            console.error(
+              "got bad status from https retrieve: ", err);
+            return reject(`status code ${err}`);
+          }
+          return resolve(res);
+        });
+        // request.on('error', (error) => {
+        //   console.error(`retrieve(${uri}): got error: ${error}`);
+        //   throw error;
+        // });
+        
+      } catch (e) {
+        console.error(`retrieve(${uri}): caught exception: ${e}`);
+        reject(e);
       }
-      return result.data;
-    } catch (e) {
-      console.error(`retrieve(${uri}): caught exception: ${e}`);
-      throw e;
-    }
+    });
   }
 
 };

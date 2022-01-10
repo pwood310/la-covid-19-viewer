@@ -2,8 +2,9 @@ import React from "react";
 import { render, RenderResult } from "@testing-library/react";
 import CovidChart from "../components/CovidChart";
 
-const axios = require('axios');
-jest.mock('axios');
+//const axios = require('axios');
+////jest.mock('axios');
+const axios = null;
 
 // https://dev.to/zaklaughton/the-only-3-steps-you-need-to-mock-an-api-call-in-jest-39mb
 

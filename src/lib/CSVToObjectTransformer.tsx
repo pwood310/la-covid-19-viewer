@@ -33,6 +33,8 @@ export class CSVToObjectTransformer {
     const type = this.nameToTypeMap.get(context.column.toString()) ?? "number"
     switch (type) {
       case 'date':
+        if (value.indexOf('T') == -1)
+          value += 'T00:00:00.000';
         return new Date(value);
 
       case 'string':
@@ -65,30 +67,26 @@ export class CSVToObjectTransformer {
       });
     });
   }
+  
+  async transformStream(csvstream: any, lineProcessorCallback: any = null): Promise<any> {
+    const records:any = [];
+    let lineCount=0;
+    const parser = csvstream.pipe(parse({
+      columns: true,
+      cast: this.castingFunction
+    }));
+    for await (const record of parser) {
+      lineCount++;
+      if (lineProcessorCallback)
+        lineProcessorCallback(record);
+      else
+        records.push(record);
 
-  async transformNew(csvString: string, transformer: (parsedLine: any) => void): Promise<number> {
-    return new Promise((resolve, reject) => {
-      let recordCount: number = 0;
-      parse(csvString, {
-          columns: true,
-        }
-      )
-        .on('readable', function (a, b) {
-          let record;
-          while (record = this.read()) {
-            recordCount++;
-            if (transformer)
-              transformer(record);
-          }
-        })
-        // When we are done, test that the parsed output matched what expected
-        .on('end', function () {
-          resolve(recordCount);
-        })
-        .on('error', function (e) {
-          console.error(`CSVToObjectTransformer got parse error: ${e}`)
-          throw new Error(`Got error while parsing: ${e}`)
-        });
-    });
+    };
+    if (lineProcessorCallback)
+      return lineCount;
+    else 
+      return records;
   }
+
 }
