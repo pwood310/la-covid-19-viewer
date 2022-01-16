@@ -68,7 +68,7 @@ export class LATimesRetriever {
     this.csvTransformer = new CSVToObjectTransformer();
   }
 
-  
+
   async retrieveCountyTotals(): Promise<CountyTotals> {
     let readerStream: any = await this.retrieveAsStream("cdph-county-cases-deaths.csv");
 
@@ -99,7 +99,7 @@ export class LATimesRetriever {
   }
 
 
-  async retrievePlaceTotals(): Promise<PlaceTotals> {
+  async retrievePlaceTotals(): Promise<any> {
     let readerStream: any = await this.retrieveAsStream("latimes-place-totals.csv");
 
     let mapCountyToPlaceToRows = {};
@@ -111,15 +111,18 @@ export class LATimesRetriever {
 
     let lineTransformer = (line) => {
 
-      if (!mapCountyToPlaceToRows[line.county])
-        mapCountyToPlaceToRows[line.county] = {};
-
       let places = mapCountyToPlaceToRows[line.county];
-      if (!places[line.name])
-        places[line.name] = [];
+      if (!places) {
+        places = {};
+        mapCountyToPlaceToRows[line.county] = places;
+      }
 
-      let rows = places[line.name];
-
+      let rows = places[line.name]
+      if (!rows) {
+        rows = [];
+        places[line.name] = rows;
+      }
+      
       let row = {
         date: line.date,
         confirmed_cases: line.confirmed_cases,
@@ -146,13 +149,15 @@ export class LATimesRetriever {
               "got bad status from https retrieve: ", err);
             return reject(`status code ${err}`);
           }
+
+          res.setEncoding('utf8');
           return resolve(res);
         });
         // request.on('error', (error) => {
         //   console.error(`retrieve(${uri}): got error: ${error}`);
         //   throw error;
         // });
-        
+
       } catch (e) {
         console.error(`retrieve(${uri}): caught exception: ${e}`);
         reject(e);
@@ -160,4 +165,24 @@ export class LATimesRetriever {
     });
   }
 
+
+  async retrieveAsStream2(filename: string): Promise<any> {
+    const uri = `${this.uriBase}/${filename}`;
+    try {
+      console.debug(`retrieve() global get with uri=${uri}`);
+      const result = await global.fetch(uri);
+
+      // console.debug("result", result)
+      if (!result || result.status !== 200) {
+        let err = result ? result.status : result;
+        console.error(
+          "bad status from get: ", err);
+        throw new Error(`LATimesRetriever.retrieveAll(${uri}) failed: ${err}`);
+      }
+      return result.body;
+    } catch (e) {
+      console.error(`retrieve(${uri}): caught exception: ${e}`);
+      throw e;
+    }
+  }
 };
