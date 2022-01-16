@@ -165,24 +165,4 @@ export class LATimesRetriever {
     });
   }
 
-
-  async retrieveAsStream2(filename: string): Promise<any> {
-    const uri = `${this.uriBase}/${filename}`;
-    try {
-      console.debug(`retrieve() global get with uri=${uri}`);
-      const result = await global.fetch(uri);
-
-      // console.debug("result", result)
-      if (!result || result.status !== 200) {
-        let err = result ? result.status : result;
-        console.error(
-          "bad status from get: ", err);
-        throw new Error(`LATimesRetriever.retrieveAll(${uri}) failed: ${err}`);
-      }
-      return result.body;
-    } catch (e) {
-      console.error(`retrieve(${uri}): caught exception: ${e}`);
-      throw e;
-    }
-  }
 };
