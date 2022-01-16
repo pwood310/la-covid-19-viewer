@@ -122,17 +122,69 @@ export class LATimesRetriever {
         rows = [];
         places[line.name] = rows;
       }
-      
+
       let row = {
         date: line.date,
         confirmed_cases: line.confirmed_cases,
-        population: line.population,
+  //      population: line.population,
       };
       rows.push(row);
     };
     rv.recordCount = await this.csvTransformer.transformStream(readerStream, lineTransformer);
     return rv;
   }
+
+  async retrievePlaceTotalsNew(): Promise<any> {
+    let readerStream: any = await this.retrieveAsStream("latimes-place-totals.csv");
+
+    let mapCountyToPlaceToRows = {};
+
+    const rv: PlaceTotals = {
+      recordCount: 0,
+      countyToPlaceData: mapCountyToPlaceToRows
+    };
+
+    let trimmedRecs = [];
+    let lineTrimmer = (line) => {
+      trimmedRecs.push({
+        name: line.name,
+        date: line.date,
+        county: line.county,
+        confirmed_cases: line.confirmed_cases,
+   //     population: line.population
+      });
+    };
+
+    let lineTransformer = (line) => {
+
+      let places = mapCountyToPlaceToRows[line.county];
+      if (!places) {
+        places = {};
+        mapCountyToPlaceToRows[line.county] = places;
+      }
+
+      let rows = places[line.name]
+      if (!rows) {
+        rows = [];
+        places[line.name] = rows;
+      }
+
+      let row = {
+        date: line.date,
+        confirmed_cases: line.confirmed_cases,
+   //     population: line.population
+      };
+      rows.push(row);
+    };
+    rv.recordCount = await this.csvTransformer.transformStream(readerStream, lineTrimmer);
+
+    for (let r of trimmedRecs) {
+      lineTransformer(r);
+    }
+    return rv;
+  }
+
+
 
   // return a stream
   async retrieveAsStream(filename: string): Promise<any> {
