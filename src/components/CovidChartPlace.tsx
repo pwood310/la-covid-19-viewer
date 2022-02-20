@@ -1,25 +1,28 @@
 // import { render } from 'react-dom';
-import React, {useState, useMemo} from "react";
+import React, { useState, useMemo } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 //import _ from "lodash";
-import {withStyles} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import {useQuery} from "react-query";
+import { useQuery } from "react-query";
 
 import "./CovidChartPlace.css";
 
+import { LATimesRetriever } from "../lib/LATimesRetriever";
+import * as retriever2 from "../lib/LATimesRetriever2";
+
 import {
-    LATimesRetriever,
     PlaceTotals,
     PlaceDateTotal
-} from "../lib/LATimesRetriever";
+} from "../lib/SimpleTypes";
 import {
     ChartDailyRowInput,
     ChartDailyRow,
     extractWorkingData,
     fullyPopulateChartInfo,
 } from "../lib/LATimesChartUtils";
+
 
 const useStyles = (theme) => ({
     root: {
@@ -47,16 +50,17 @@ function CovidChartPlace(props: Props): any {
         hoverData: null,
     });
 
-    const {county, place} = props;
+    const { county, place } = props;
 
     function retrieve(): () => Promise<PlaceTotals> {
         const retriever = new LATimesRetriever();
         return async () => {
-            return await retriever.retrievePlaceTotals();
+            //return await retriever.retrievePlaceTotals();
+            return await retriever2.retrievePlaceTotals();
         };
     }
 
-    const {isLoading, isError, data, error} = useQuery<PlaceTotals, any>(
+    const { isLoading, isError, data, error } = useQuery<PlaceTotals, any>(
         "placeTotals",
         retrieve(),
         {
@@ -66,18 +70,18 @@ function CovidChartPlace(props: Props): any {
     );
 
     const filteredData: ChartDailyRowInput[] = useMemo(() => {
-        if (!data || !data.recordCount ) return [];
+        if (!data || !data.recordCount) return [];
         const countyMap = data.countyToPlaceData[county];
         const placeRows = countyMap[place];
         if (!placeRows) return [];
 
         return placeRows.map((row: PlaceDateTotal) => {
-                return {
-                    date: row.date,
-                    rawCumulative: row.confirmed_cases,
-                    rawDaily: 0,
-                };
-            });
+            return {
+                date: row.date,
+                rawCumulative: row.confirmed_cases,
+                rawDaily: 0,
+            };
+        });
     }, [data, county, place]);
 
     const dataReadyForCharting: ChartDailyRow[] = useMemo(
@@ -114,7 +118,7 @@ function CovidChartPlace(props: Props): any {
     if (!filteredData || !filteredData.length) {
 
         return (<div>
-            <h3 style={{textAlign: "center"}}>No 'Place' breakdown for {county} county</h3>
+            <h3 style={{ textAlign: "center" }}>No 'Place' breakdown for {county} county</h3>
         </div>);
 
     }
@@ -133,13 +137,13 @@ function CovidChartPlace(props: Props): any {
 
     function toggleCumulativeScale() {
         const newScalingType = getToggledScaleName(state.cumulativeScale);
-        const newState = {...state, cumulativeScale: newScalingType};
+        const newState = { ...state, cumulativeScale: newScalingType };
         setState(newState);
     }
 
     function toggleDailyScale() {
         const newScalingType = getToggledScaleName(state.dailyScale);
-        const newState = {...state, dailyScale: newScalingType};
+        const newState = { ...state, dailyScale: newScalingType };
         setState(newState);
     }
 
@@ -147,7 +151,7 @@ function CovidChartPlace(props: Props): any {
 
     return (
         <div className="CovidChartPlace">
-            <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions}/>
+            <HighchartsReact highcharts={Highcharts} options={memoizedChartOptions} />
             {/* <h3>Hovering over {hoverData}</h3> */}
 
             <Button

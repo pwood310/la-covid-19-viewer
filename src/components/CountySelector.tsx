@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { QueryClientProvider, QueryClient, useQuery } from "react-query";
 
-import { LATimesRetriever, CountyTotals } from "../lib/LATimesRetriever";
+import { LATimesRetriever } from "../lib/LATimesRetriever";
+import * as retriever2 from "../lib/LATimesRetriever2";
+
+import { CountyTotals } from "../lib/SimpleTypes";
 
 // import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -35,7 +38,9 @@ function CountySelector(props: IProp) {
   function retrieve(): () => Promise<CountyTotals> {
     const retriever = new LATimesRetriever();
     return async () => {
-      return await retriever.retrieveCountyTotals();
+      //return await retriever.retrieveCountyTotals();
+      return await retriever2.retrieveCountyTotals();
+    
     };
   }
 

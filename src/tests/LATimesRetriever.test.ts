@@ -1,6 +1,7 @@
 import React from 'react';
 //import { render } from '@testing-library/react';
-import {LATimesRetriever, PlaceTotals, CountyTotals} from '../lib/LATimesRetriever';
+import {LATimesRetriever} from '../lib/LATimesRetriever';
+import { PlaceTotals, CountyTotals } from "../lib/SimpleTypes";
 
 
 describe("LATimesRetriever Tests", () => {

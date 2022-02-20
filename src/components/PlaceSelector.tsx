@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { useQuery } from "react-query";
-import {LATimesRetriever, PlaceTotals} from "../lib/LATimesRetriever";
+import {LATimesRetriever} from "../lib/LATimesRetriever";
+import * as retriever2 from "../lib/LATimesRetriever2";
+import { PlaceTotals } from "../lib/SimpleTypes";
 
 // import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -43,7 +45,8 @@ function PlaceSelector(props: IProp) {
   function retrieve(): () => Promise<PlaceTotals> {
     const retriever = new LATimesRetriever();
     return async () => {
-      return await retriever.retrievePlaceTotals();
+      // return await retriever.retrievePlaceTotals();
+      return await retriever2.retrievePlaceTotals();
     };
   }
 

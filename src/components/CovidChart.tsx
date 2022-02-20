@@ -11,9 +11,13 @@ import "./CovidChart.css";
 
 import {
   LATimesRetriever,
-  CountyTotals,
-  CountyDateTotal,
 } from "../lib/LATimesRetriever";
+import * as retriever2 from "../lib/LATimesRetriever2";
+
+import {
+  CountyTotals,
+  CountyDateTotal
+} from "../lib/SimpleTypes";
 //import { fullyPopulateChartInfo, filterAndSortByDate } from "../lib/LATimesChartUtils";
 import {
   ChartDailyRowInput,
@@ -56,7 +60,9 @@ function CovidChart(props: Props): any {
   function retrieve(): () => Promise<CountyTotals> {
     const retriever = new LATimesRetriever();
     return async () => {
-      return await retriever.retrieveCountyTotals();
+      // return await retriever.retrieveCountyTotals();
+      return await retriever2.retrieveCountyTotals();
+    
     };
   }
 
