@@ -27,7 +27,7 @@ export async function myNodeFunction(): Promise<string> {
 }
 
 async function* makeTextFileLineIterator(readableStream:ReadableStream<Uint8Array>): AsyncGenerator<any, void, unknown> {
-	const utf8Decoder = new TextDecoder("utf-8");
+	const utf8Decoder:any = new TextDecoder("utf-8");
 	let reader = readableStream.getReader();
 	let { value: chunk8, done: readerDone } = await reader.read();
 	let chunk = chunk8 ? utf8Decoder.decode(chunk8, { stream: true }) : "";
