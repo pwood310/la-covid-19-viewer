@@ -81,7 +81,7 @@ class Converter {
 		let splitees = header.split(',');
 		let self = this;
 		for (const name of splitees) {
-			console.log(name)
+			//console.log(name)
 			let typer:string = DefaultNameToTypeInitializer[name] || 'number';
 			self.typeMap[name] = typer;
 			self.names.push([name, typer]);
@@ -168,7 +168,7 @@ async function retrieveStream(uri: string, rowTransformer:any=null): Promise<Chu
 		fetch(uri, { mode: 'cors' })
 			.then((response:Response): ReadableStream<Uint8Array> => {
 					if (!response.ok) {
-						console.dir(response);
+						//console.dir(response);
 						throw new Error("HTTP error, status = " + response.status);
 					}
 					return response.body;

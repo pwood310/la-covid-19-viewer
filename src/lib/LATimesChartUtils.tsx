@@ -344,8 +344,10 @@ export function fullyPopulateChartInfo(
   dailyScale: string
 ): any {
   if (!sortedRows || !sortedRows.length) return {};
-
+  console.debug(`getting options for ${title}`)
   const chartOptions = createChartOptions(title, cumulativeScale, dailyScale);
+  console.debug(`setting seriesdata for ${title}`)
   setSeriesData(sortedRows, chartOptions);
+  console.debug(`returning chartOptions for ${title}`)
   return chartOptions;
 }
